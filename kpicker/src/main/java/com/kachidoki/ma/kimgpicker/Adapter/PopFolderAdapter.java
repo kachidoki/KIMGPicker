@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kachidoki.ma.kimgpicker.Bean.ImgFolder;
-import com.kachidoki.ma.kimgpicker.KImgPicker;
+import com.kachidoki.ma.kimgpicker.KIMGPicker;
 import com.kachidoki.ma.kimgpicker.R;
 import com.kachidoki.ma.kimgpicker.Utils.Utils;
 import com.kachidoki.ma.kimgpicker.Widget.PopFolderWindow;
@@ -23,7 +23,7 @@ import java.util.List;
 
 public class PopFolderAdapter extends RecyclerView.Adapter<PopFolderAdapter.PopViewHolder>{
 
-    private KImgPicker picker;
+    private KIMGPicker picker;
     private Context context;
     private int imageSize;
     private List<ImgFolder> folderList;
@@ -38,7 +38,7 @@ public class PopFolderAdapter extends RecyclerView.Adapter<PopFolderAdapter.PopV
     public PopFolderAdapter(Context context){
         this.context = context;
         folderList = new ArrayList<>();
-        picker = KImgPicker.getInstance();
+        picker = KIMGPicker.getInstance();
         imageSize = Utils.getImageItemWidth(context);
     }
 

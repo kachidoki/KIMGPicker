@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.kachidoki.ma.kimgpicker.KImgPicker;
 import com.kachidoki.ma.kimgpicker.Loader.ImageLoader;
+import com.kachidoki.ma.kimgpicker.UI.ImagePickActivity;
 import com.kachidoki.ma.kimgpicker.UI.ImgListActivity;
 
 import java.io.File;
@@ -27,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.picker).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, ImgListActivity.class));
+                startActivity(new Intent(MainActivity.this, ImagePickActivity.class));
             }
         });
     }

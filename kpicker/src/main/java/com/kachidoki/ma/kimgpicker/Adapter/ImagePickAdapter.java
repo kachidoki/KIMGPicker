@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Context;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,11 +11,10 @@ import android.widget.AbsListView;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 
-
 import com.kachidoki.ma.kimgpicker.Bean.ImgItem;
-import com.kachidoki.ma.kimgpicker.KImgPicker;
+import com.kachidoki.ma.kimgpicker.KIMGPicker;
 import com.kachidoki.ma.kimgpicker.R;
-import com.kachidoki.ma.kimgpicker.UI.ImgListActivity;
+import com.kachidoki.ma.kimgpicker.UI.ImagePickActivity;
 import com.kachidoki.ma.kimgpicker.Utils.ActivityUtils;
 import com.kachidoki.ma.kimgpicker.Utils.Code;
 import com.kachidoki.ma.kimgpicker.Utils.Utils;
@@ -24,25 +22,32 @@ import com.kachidoki.ma.kimgpicker.Utils.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Created by Kachidoki on 2017/6/13.
+ */
 
-public class ImageListAdapter extends RecyclerView.Adapter<ViewHolder> {
+public class ImagePickAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     private static final int ITEM_TYPE_CAMERA = 0;  //第一个条目是相机
     private static final int ITEM_TYPE_NORMAL = 1;  //第一个条目不是相机
-    private KImgPicker picker;
+
+    private KIMGPicker picker;
     private Context context;
+    private OnPickItemListener listener;
     private List<ImgItem> images;       //当前需要显示的所有的图片数据
     private List<ImgItem> mSelectedImages; //全局保存的已经选中的图片数据
     private boolean isShowCamera;         //是否显示拍照按钮
     private int mImageSize;               //每个条目的大小
-    private OnImageItemClickListener listener;   //图片被点击的监听
 
-    public void setOnItemClickListener(OnImageItemClickListener listener) {
+    public void setOnItemClickListener(OnPickItemListener listener) {
         this.listener = listener;
     }
 
-    public interface OnImageItemClickListener {
-        void onImageItemClick(View view, ImgItem imageItem, int position);
+    public interface OnPickItemListener{
+
+        void onImageClick(ImgItem imageItem, int position);
+
+        void onImageSelected(ImgItem imageItem, int position);
     }
 
     public void setImgData(List<ImgItem> images) {
@@ -60,29 +65,29 @@ public class ImageListAdapter extends RecyclerView.Adapter<ViewHolder> {
         }
     }
 
-    public ImageListAdapter(Context context) {
+    public ImagePickAdapter(Context context) {
         this.context = context;
         images=new ArrayList<>();
         mImageSize = Utils.getImageItemWidth(context);
-        picker = KImgPicker.getInstance();
-        isShowCamera = picker.isShowCamera();
-        mSelectedImages = picker.getSelectedImages();
+        picker = KIMGPicker.getInstance();
+        isShowCamera = picker.getDataHolder().getConfig().needCamera;
+        mSelectedImages = picker.getDataHolder().getSelectedImages();
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == ITEM_TYPE_CAMERA){
-            return new CameraViewHolder(LayoutInflater.from(context).inflate(R.layout.item_camera,parent,false));
+            return new ImagePickAdapter.CameraViewHolder(LayoutInflater.from(context).inflate(R.layout.item_camera,parent,false));
         }
-        return new ImageViewHolder(LayoutInflater.from(context).inflate(R.layout.item_imglist,parent,false));
+        return new ImagePickAdapter.ImageViewHolder(LayoutInflater.from(context).inflate(R.layout.item_imglist,parent,false));
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        if (holder instanceof CameraViewHolder){
-            ((CameraViewHolder)holder).setCamera();
-        }else if (holder instanceof ImageViewHolder){
-            ((ImageViewHolder)holder).setData(position);
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof ImagePickAdapter.CameraViewHolder){
+            ((ImagePickAdapter.CameraViewHolder)holder).setCamera();
+        }else if (holder instanceof ImagePickAdapter.ImageViewHolder){
+            ((ImagePickAdapter.ImageViewHolder)holder).setData(position);
         }
     }
 
@@ -106,7 +111,11 @@ public class ImageListAdapter extends RecyclerView.Adapter<ViewHolder> {
 
 
 
-    private class ImageViewHolder extends ViewHolder {
+
+
+
+
+    private class ImageViewHolder extends RecyclerView.ViewHolder {
 
         View rootView;
         ImageView ivThumb;
@@ -127,25 +136,25 @@ public class ImageListAdapter extends RecyclerView.Adapter<ViewHolder> {
             ivThumb.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (listener != null) listener.onImageItemClick(rootView, imageItem, position);
+                    if (listener != null) listener.onImageClick(imageItem, position);
                 }
             });
             cbCheck.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int selectLimit = picker.getSelectLimit();
+                    int selectLimit = picker.getDataHolder().getConfig().maxNum;
                     if (cbCheck.isChecked() && mSelectedImages.size() >= selectLimit) {
                         ActivityUtils.showToast("最多选择"+selectLimit+"张图片",context);
                         cbCheck.setChecked(false);
                         mask.setVisibility(View.GONE);
                     } else {
-                        picker.addSelectedImageItem(position, imageItem, cbCheck.isChecked());
+                        listener.onImageSelected(imageItem,position);
                         mask.setVisibility(View.VISIBLE);
                     }
                 }
             });
             //根据是否多选，显示或隐藏checkbox
-            if (picker.isMultiMode()) {
+            if (picker.getDataHolder().config.multiSelect) {
                 cbCheck.setVisibility(View.VISIBLE);
                 boolean checked = mSelectedImages.contains(imageItem);
                 if (checked) {
@@ -163,7 +172,7 @@ public class ImageListAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     }
 
-    private class CameraViewHolder extends ViewHolder {
+    private class CameraViewHolder extends RecyclerView.ViewHolder {
 
         View mItemView;
 
@@ -179,9 +188,9 @@ public class ImageListAdapter extends RecyclerView.Adapter<ViewHolder> {
                 @Override
                 public void onClick(View v) {
                     if (!ActivityUtils.checkPermission(Manifest.permission.CAMERA,context)) {
-                        ActivityCompat.requestPermissions((ImgListActivity)context, new String[]{Manifest.permission.CAMERA}, Code.REQUEST_PERMISSION_CAMERA);
+                        ActivityCompat.requestPermissions((ImagePickActivity)context, new String[]{Manifest.permission.CAMERA}, Code.REQUEST_PERMISSION_CAMERA);
                     } else {
-                        Utils.takePicture((ImgListActivity)context, Code.REQUEST_CODE_TAKE,picker.getTakeImageFile());
+                        Utils.takePicture((ImagePickActivity)context, Code.REQUEST_CODE_TAKE,picker.getDataHolder().config.takeImageFile);
                     }
                 }
             });
