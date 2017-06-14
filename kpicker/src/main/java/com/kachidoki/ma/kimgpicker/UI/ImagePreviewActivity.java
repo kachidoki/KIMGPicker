@@ -40,6 +40,7 @@ public class ImagePreviewActivity extends AppCompatActivity implements View.OnCl
 
     private List<ImgItem> previewImgs;
     private int mCurrentPosition = 0;
+    private int maxSelect;
     private List<ImgItem> selectedImages;
 
     @Override
@@ -54,13 +55,17 @@ public class ImagePreviewActivity extends AppCompatActivity implements View.OnCl
     private void initView(){
         viewPager = (TouchViewPager) findViewById(R.id.viewpager);
         topBar = findViewById(R.id.top_bar);
-        tbOk = (Button) findViewById(R.id.btn_ok);
+        tbOk = (Button) findViewById(R.id.tbConfirm);
         tbOk.setOnClickListener(this);
-        tbBack = (ImageView) findViewById(R.id.btn_back);
+        setOkText();
+        tbBack = (ImageView) findViewById(R.id.tbBack);
         tbBack.setOnClickListener(this);
         ckSelect = (CheckBox) findViewById(R.id.ckSelect);
         ckSelect.setOnClickListener(this);
+        boolean isSelect = picker.getDataHolder().isSelect(previewImgs.get(mCurrentPosition));
+        ckSelect.setChecked(isSelect);
         tvTitle = (TextView) findViewById(R.id.tvTitle);
+        tvTitle.setText(mCurrentPosition+"/"+previewImgs.size());
     }
 
     private void initData(){
@@ -68,6 +73,7 @@ public class ImagePreviewActivity extends AppCompatActivity implements View.OnCl
         picker = KIMGPicker.getInstance();
         selectedImages = picker.getDataHolder().getSelectedImages();
         previewImgs = picker.getDataHolder().previewCache;
+        maxSelect = picker.getDataHolder().config.maxNum;
     }
 
     private void initAdapter(){
@@ -97,24 +103,27 @@ public class ImagePreviewActivity extends AppCompatActivity implements View.OnCl
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.ckSelect){
-            int maxSelect = picker.getDataHolder().config.maxNum;
-            if (ckSelect.isChecked()){
-                selectedImages.remove(previewImgs.get(mCurrentPosition));
-                ckSelect.setChecked(false);
-            }else {
-                if (selectedImages.size() >= maxSelect){
-                    ActivityUtils.showToast("最多选择"+maxSelect+"张照片",this);
-                }else {
+            if (ckSelect.isChecked()) {
+                if (selectedImages.size()<maxSelect){
                     selectedImages.add(previewImgs.get(mCurrentPosition));
+                }else {
+                    ActivityUtils.showToast("最多选择"+maxSelect+"张图片",this);
+                    ckSelect.setChecked(false);
                 }
+            } else {
+                selectedImages.remove(previewImgs.get(mCurrentPosition));
             }
-            if (selectedImages.size()>0){
-                tbOk.setText("完成("+selectedImages+"/"+maxSelect+")");
-                tbOk.setEnabled(true);
-            }else {
-                tbOk.setText("完成");
-                tbOk.setEnabled(false);
-            }
+            setOkText();
+        }
+    }
+
+    private void setOkText(){
+        if (selectedImages.size()>0){
+            tbOk.setText("完成("+selectedImages.size()+"/"+maxSelect+")");
+            tbOk.setEnabled(true);
+        }else {
+            tbOk.setText("完成");
+            tbOk.setEnabled(false);
         }
     }
 

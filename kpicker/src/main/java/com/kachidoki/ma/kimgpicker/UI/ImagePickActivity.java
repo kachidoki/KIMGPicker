@@ -173,7 +173,7 @@ public class ImagePickActivity extends AppCompatActivity implements View.OnClick
             if (popFolderWindow.isShowing()) {
                 popFolderWindow.dismiss();
             } else {
-//                popFolderWindow.showAtLocation(mFooterBar, Gravity.NO_GRAVITY, 0, 0);
+                popFolderWindow.showAtLocation(mFooterBar, Gravity.NO_GRAVITY, 0, 0);
             }
         } else if (id == R.id.tbConfirm){
             //裁剪

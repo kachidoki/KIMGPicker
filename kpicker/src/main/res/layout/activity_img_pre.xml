@@ -10,7 +10,7 @@
 
     <include
         android:id="@+id/top_bar"
-        layout="@layout/include_top_bar"/>
+        layout="@layout/include_titlebar"/>
 
     <CheckBox
         android:id="@+id/ckSelect"
