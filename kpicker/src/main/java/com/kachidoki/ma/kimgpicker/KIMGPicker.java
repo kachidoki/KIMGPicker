@@ -67,7 +67,7 @@ public class KIMGPicker {
     }
 
     public static void GoCrop(Activity context, String imagePath) {
-        File outFile = Utils.createFile(KIMGPicker.getInstance().dataHolder.config.cropCacheFolder,"",".jpg");
+        File outFile = Utils.createFile(new File(KIMGPicker.getInstance().dataHolder.config.cropCacheFolder),"",".jpg");
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(Utils.getImageContentUri(context,new File(imagePath)), "image/*");
         intent.putExtra("crop", "true");

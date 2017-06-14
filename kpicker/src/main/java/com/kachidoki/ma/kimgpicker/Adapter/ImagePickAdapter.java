@@ -51,7 +51,7 @@ public class ImagePickAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     public void setImgData(List<ImgItem> images) {
-        if (images == null) images = new ArrayList<>();
+        if (images == null) this.images = new ArrayList<>();
         else this.images = images;
         notifyDataSetChanged();
     }
@@ -67,6 +67,10 @@ public class ImagePickAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         } else {
             return images.get(position);
         }
+    }
+
+    public void SelectChange(){
+        notifyDataSetChanged();
     }
 
     public ImagePickAdapter(Context context) {

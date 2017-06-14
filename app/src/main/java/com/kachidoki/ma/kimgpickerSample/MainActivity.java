@@ -22,12 +22,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        final KPConfig config = new KPConfig.Builder(this)
+                                    .needCamera(true)
+                                    .multiSelect(false)
+                                    .needCrop(true)
+                                    .build();
+
 
         findViewById(R.id.picker).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                startActivity(new Intent(MainActivity.this, ImagePickActivity.class));
-                KIMGPicker.GoPick(MainActivity.this, new KPConfig.Builder(MainActivity.this).build(),new GlideImageLoader());
+                KIMGPicker.GoPick(MainActivity.this, config,new GlideImageLoader());
             }
         });
     }

@@ -39,6 +39,7 @@ import java.util.List;
 public class ImagePickActivity extends AppCompatActivity implements View.OnClickListener,LoaderCallBack, ImagePickAdapter.OnPickItemListener {
 
     private KIMGPicker picker;
+    private boolean first=false;
 
     //.....view
     private Button btOk;
@@ -72,6 +73,14 @@ public class ImagePickActivity extends AppCompatActivity implements View.OnClick
         requestPermissions();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!first&&!pickAdapter.getImgData().isEmpty()){
+            pickAdapter.SelectChange();
+            first=true;
+        }
+    }
 
     public void initView(){
         btOk = (Button) findViewById(R.id.tbConfirm);

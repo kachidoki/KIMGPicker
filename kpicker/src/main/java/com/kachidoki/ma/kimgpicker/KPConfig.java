@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Environment;
 
 import com.kachidoki.ma.kimgpicker.Loader.ImageLoader;
+import com.kachidoki.ma.kimgpicker.Utils.Utils;
 
 import java.io.File;
 import java.io.Serializable;
@@ -79,8 +80,8 @@ public class KPConfig {
     /**
      * 拍照存储路径
      */
-    public File cropCacheFolder;
-    public File takeImageFile;
+    public String cropCacheFolder;
+    public String takeImageFile;
 
     /**
      * 裁剪输出大小
@@ -129,9 +130,8 @@ public class KPConfig {
         private int btnTextColor;
         private int btnBgColor;
         private String allImagesText;
-        private String filePath;
-        private File cropCacheFolder;
-        private File takeImageFile;
+        private String cropCacheFolder;
+        private String takeImageFile;
 
         private int aspectX = 1;
         private int aspectY = 1;
@@ -140,14 +140,12 @@ public class KPConfig {
 
         public Builder(Context context) {
 
-//            if (FileUtils.isSdCardAvailable())
-//                filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Camera";
-//            else
-//                filePath = Environment.getRootDirectory().getAbsolutePath() + "/Camera";
-//
-//            FileUtils.createDir(filePath);
+            if (Utils.existSDCard())
+                takeImageFile = Environment.getExternalStorageDirectory().getAbsolutePath()+ "/DCIM/camera/";
+            else
+                takeImageFile = Environment.getDataDirectory().getAbsolutePath();
 
-
+            cropCacheFolder = context.getCacheDir().getAbsolutePath()+"/crop";
 
 
             title = "选择图片";
@@ -233,10 +231,6 @@ public class KPConfig {
             return this;
         }
 
-        private Builder filePath(String filePath) {
-            this.filePath = filePath;
-            return this;
-        }
 
         public Builder cropSize(int aspectX, int aspectY, int outputX, int outputY) {
             this.aspectX = aspectX;
