@@ -60,7 +60,7 @@ public class PopFolderAdapter extends RecyclerView.Adapter<PopFolderAdapter.PopV
 
     @Override
     public PopViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new PopViewHolder(LayoutInflater.from(context).inflate(R.layout.pop_folder,parent));
+        return new PopViewHolder(LayoutInflater.from(context).inflate(R.layout.item_pop_folder,parent));
     }
 
     @Override

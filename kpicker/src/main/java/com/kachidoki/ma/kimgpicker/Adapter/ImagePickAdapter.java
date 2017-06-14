@@ -47,7 +47,7 @@ public class ImagePickAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         void onImageClick(ImgItem imageItem, int position);
 
-        void onImageSelected(ImgItem imageItem, int position);
+        void onImageSelected(ImgItem imageItem, int position,boolean isAdd);
     }
 
     public void setImgData(List<ImgItem> images) {
@@ -71,7 +71,7 @@ public class ImagePickAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     public ImagePickAdapter(Context context) {
         this.context = context;
-        images=new ArrayList<>();
+        images = new ArrayList<>();
         mImageSize = Utils.getImageItemWidth(context);
         picker = KIMGPicker.getInstance();
         isShowCamera = picker.getDataHolder().getConfig().needCamera;
@@ -147,22 +147,32 @@ public class ImagePickAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 @Override
                 public void onClick(View v) {
                     int selectLimit = picker.getDataHolder().getConfig().maxNum;
-                    if (cbCheck.isChecked() && mSelectedImages.size() >= selectLimit) {
-                        ActivityUtils.showToast("最多选择"+selectLimit+"张图片",context);
-                        cbCheck.setChecked(false);
-                        mask.setVisibility(View.GONE);
+                    if (cbCheck.isChecked()) {
+                        //点的时候是没选
+                        if (mSelectedImages.size()<selectLimit){
+                            //可选
+                            mSelectedImages.add(imageItem);
+                            listener.onImageSelected(imageItem,position,true);
+                            mask.setVisibility(View.VISIBLE);
+                        }else {
+                            //超过数量 保持原样
+                            ActivityUtils.showToast("最多选择"+selectLimit+"张图片",context);
+                            cbCheck.setChecked(false);
+                            mask.setVisibility(View.GONE);
+                        }
                     } else {
-                        mSelectedImages.add(imageItem);
-                        listener.onImageSelected(imageItem,position);
-                        mask.setVisibility(View.VISIBLE);
+                        //点的时候已经选了
+                        mSelectedImages.remove(imageItem);
+                        listener.onImageSelected(imageItem,position,false);
+                        mask.setVisibility(View.GONE);
                     }
                 }
             });
             //根据是否多选，显示或隐藏checkbox
             if (picker.getDataHolder().config.multiSelect) {
                 cbCheck.setVisibility(View.VISIBLE);
-                boolean checked = mSelectedImages.contains(imageItem);
-                if (checked) {
+                boolean selected = mSelectedImages.contains(imageItem);
+                if (selected) {
                     mask.setVisibility(View.VISIBLE);
                     cbCheck.setChecked(true);
                 } else {

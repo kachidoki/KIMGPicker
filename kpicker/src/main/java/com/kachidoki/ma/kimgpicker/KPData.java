@@ -56,6 +56,13 @@ public class KPData {
         return selectedImg;
     }
 
+    public void newSelect(){
+        if (selectedImg==null){
+            selectedImg = new ArrayList<>();
+        }else {
+            selectedImg.clear();
+        }
+    }
 
     public void clearSelectedImages() {
         if (selectedImg != null) selectedImg.clear();

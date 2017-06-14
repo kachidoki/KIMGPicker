@@ -55,9 +55,15 @@ public class KIMGPicker {
     //goPick
 
     public static void GoPick(Context context,KPConfig config,ImageLoader loader){
+        GoPick(context,config,loader,false);
+    }
+
+    public static void GoPick(Context context,KPConfig config,ImageLoader loader,boolean isuselast){
         getInstance().getDataHolder().config=config;
         getInstance().imageLoader=loader;
-        context.startActivity(new Intent(context, ImagePickActivity.class));
+        Intent intent = new Intent(context, ImagePickActivity.class);
+        intent.putExtra(Code.EXTRA_USE_LASTSELECTED,isuselast);
+        context.startActivity(intent);
     }
 
     public static void GoCrop(Activity context, String imagePath) {

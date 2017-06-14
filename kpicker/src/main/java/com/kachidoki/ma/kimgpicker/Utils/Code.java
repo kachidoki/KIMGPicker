@@ -18,6 +18,7 @@ public class Code {
 
     public static final String EXTRA_RESULT_ITEMS = "extra_result_items";
     public static final String EXTRA_SELECTED_IMAGE_POSITION = "selected_image_position";
+    public static final String EXTRA_USE_LASTSELECTED = "use_last_select";
     public static final String EXTRA_IMAGE_ITEMS = "extra_image_items";
     public static final String EXTRA_FROM_ITEMS = "extra_from_items";
 }
