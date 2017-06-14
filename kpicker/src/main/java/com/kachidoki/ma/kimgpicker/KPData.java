@@ -2,6 +2,7 @@ package com.kachidoki.ma.kimgpicker;
 
 import com.kachidoki.ma.kimgpicker.Bean.ImgItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,6 +21,17 @@ public class KPData {
 
     public KPConfig config;
     public List<ImgItem> selectedImg;
+    public List<ImgItem> previewCache = new ArrayList<>();
+
+    public void setPreCache(List<ImgItem> list){
+        if (list!=null){
+            previewCache = list;
+        }
+    }
+
+    public void clearCache(){
+        if (previewCache!=null) previewCache.clear();
+    }
 
     public KPConfig getConfig() {
         return config;

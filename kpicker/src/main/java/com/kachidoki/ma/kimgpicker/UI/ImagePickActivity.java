@@ -11,7 +11,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -44,7 +43,6 @@ public class ImagePickActivity extends AppCompatActivity implements View.OnClick
     //.....view
     private Button btOk;
     private Button btDir;
-    private Button btPre;
     private View mFooterBar;
     private TextView title;
     private RecyclerView recyclerView;
@@ -75,17 +73,15 @@ public class ImagePickActivity extends AppCompatActivity implements View.OnClick
         btOk.setOnClickListener(this);
         btDir = (Button) findViewById(R.id.btn_dir);
         btDir.setOnClickListener(this);
-        btPre = (Button) findViewById(R.id.btn_preview);
-        btPre.setOnClickListener(this);
         findViewById(R.id.tbBack).setOnClickListener(this);
         title = (TextView) findViewById(R.id.tvTitle);
         if (picker.getDataHolder().config.multiSelect) {
             btOk.setVisibility(View.VISIBLE);
-            btPre.setVisibility(View.VISIBLE);
         } else {
             btOk.setVisibility(View.GONE);
-            btPre.setVisibility(View.GONE);
         }
+        mFooterBar = findViewById(R.id.footer_bar);
+        //config 设置
     }
 
     public void initRecyclerView(){
@@ -107,6 +103,24 @@ public class ImagePickActivity extends AppCompatActivity implements View.OnClick
             }
         }else{
             new ImgDataLoder(this, null, this);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == Code.REQUEST_PERMISSION_STORAGE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                new ImgDataLoder(this, null, this);
+            } else {
+                ActivityUtils.showToast("权限被禁止，无法选择本地图片",this);
+            }
+        } else if (requestCode == Code.REQUEST_PERMISSION_CAMERA) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Utils.takePicture(this, Code.REQUEST_CODE_TAKE,picker.getDataHolder().config.takeImageFile);
+            } else {
+                ActivityUtils.showToast("权限被禁止，无法打开相机",this);
+            }
         }
     }
 
@@ -139,48 +153,47 @@ public class ImagePickActivity extends AppCompatActivity implements View.OnClick
         popFolderWindow.setMargin(mFooterBar.getHeight());
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == Code.REQUEST_PERMISSION_STORAGE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                new ImgDataLoder(this, null, this);
-            } else {
-                ActivityUtils.showToast("权限被禁止，无法选择本地图片",this);
-            }
-        } else if (requestCode == Code.REQUEST_PERMISSION_CAMERA) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Utils.takePicture(this, Code.REQUEST_CODE_TAKE,picker.getDataHolder().config.takeImageFile);
-            } else {
-                ActivityUtils.showToast("权限被禁止，无法打开相机",this);
-            }
-        }
-    }
 
     @Override
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_dir) {
             if (folderList == null) {
-                Log.i("ImageGridActivity", "您的手机没有图片");
+                ActivityUtils.showToast("没有图片",this);
                 return;
             }
             //点击文件夹按钮
             createPopFolderList();
-            popAdapter.setFolders(folderList);  //刷新数据
+            popAdapter.setFolders(folderList);  //刷新数据??
             if (popFolderWindow.isShowing()) {
                 popFolderWindow.dismiss();
             } else {
                 popFolderWindow.showAtLocation(mFooterBar, Gravity.NO_GRAVITY, 0, 0);
             }
-        } else {
+        } else if (id == R.id.tbConfirm){
+            //裁剪
+        } else if (id == R.id.tbBack){
+            finish();
         }
     }
 
     //adapter的Click回调/select
     @Override
     public void onImageClick(ImgItem imageItem, int position) {
-
+        position = picker.getDataHolder().config.needCamera ? position - 1 : position;
+        if (picker.getDataHolder().config.multiSelect) {
+            //多选去预览画面
+            picker.getDataHolder().setPreCache(pickAdapter.getImgData());
+            ImagePreviewActivity.GoPreview(this,position);
+        } else {
+            if (picker.getDataHolder().config.needCrop) {
+                //去裁剪
+                KIMGPicker.GoCrop(this,imageItem.getPath());
+            } else {
+                //不裁剪返回
+                finish();
+            }
+        }
     }
 
     @Override
@@ -189,13 +202,10 @@ public class ImagePickActivity extends AppCompatActivity implements View.OnClick
         if (picker.getDataHolder().getSelectImageCount() > 0) {
             btOk.setText("完成("+picker.getDataHolder().getSelectImageCount()+"/"+maxCount+")");
             btOk.setEnabled(true);
-            btPre.setEnabled(true);
         } else {
             btOk.setText("完成");
             btOk.setEnabled(false);
-            btPre.setEnabled(false);
         }
-        btPre.setText("预览("+picker.getDataHolder().getSelectImageCount()+")");
         for (int i = picker.getDataHolder().config.needCamera? 1 : 0; i < pickAdapter.getItemCount(); i++) {
             if (pickAdapter.getItem(i).getPath() != null && pickAdapter.getItem(i).getPath().equals(imageItem.getPath())) {
                 pickAdapter.notifyItemChanged(i);

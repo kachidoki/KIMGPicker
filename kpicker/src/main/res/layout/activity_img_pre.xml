@@ -12,6 +12,13 @@
         android:id="@+id/top_bar"
         layout="@layout/include_top_bar"/>
 
+    <CheckBox
+        android:id="@+id/ckSelect"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/top_bar"
+        android:padding="5dp" />
 
 
 </RelativeLayout>

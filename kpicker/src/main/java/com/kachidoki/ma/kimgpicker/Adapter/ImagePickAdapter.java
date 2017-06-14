@@ -56,6 +56,10 @@ public class ImagePickAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         notifyDataSetChanged();
     }
 
+    public List<ImgItem> getImgData(){
+        return images;
+    }
+
     public ImgItem getItem(int position) {
         if (isShowCamera) {
             if (position == 0) return null;
@@ -148,6 +152,7 @@ public class ImagePickAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         cbCheck.setChecked(false);
                         mask.setVisibility(View.GONE);
                     } else {
+                        mSelectedImages.add(imageItem);
                         listener.onImageSelected(imageItem,position);
                         mask.setVisibility(View.VISIBLE);
                     }
