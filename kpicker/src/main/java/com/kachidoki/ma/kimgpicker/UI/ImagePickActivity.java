@@ -132,7 +132,7 @@ public class ImagePickActivity extends AppCompatActivity implements View.OnClick
             }
         } else if (requestCode == Code.REQUEST_PERMISSION_CAMERA) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Utils.takePicture(this, Code.REQUEST_CODE_TAKE,picker.getDataHolder().config.takeImageFile);
+                KIMGPicker.GoTake(this, Code.REQUEST_CODE_TAKE,picker.getDataHolder().config.takeImageFile);
             } else {
                 ActivityUtils.showToast("权限被禁止,无法打开相机",this);
             }
@@ -223,6 +223,15 @@ public class ImagePickActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
+
+    @Override
+    public void onCameraClick() {
+        if (!ActivityUtils.checkPermission(Manifest.permission.CAMERA,this)) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, Code.REQUEST_PERMISSION_CAMERA);
+        } else {
+            KIMGPicker.GoTake(this, Code.REQUEST_CODE_TAKE,picker.getDataHolder().config.takeImageFile);
+        }
+    }
 
 
     @Override

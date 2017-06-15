@@ -1,8 +1,6 @@
 package com.kachidoki.ma.kimgpicker.Adapter;
 
-import android.Manifest;
 import android.content.Context;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,9 +12,7 @@ import android.widget.ImageView;
 import com.kachidoki.ma.kimgpicker.Bean.ImgItem;
 import com.kachidoki.ma.kimgpicker.KIMGPicker;
 import com.kachidoki.ma.kimgpicker.R;
-import com.kachidoki.ma.kimgpicker.UI.ImagePickActivity;
 import com.kachidoki.ma.kimgpicker.Utils.ActivityUtils;
-import com.kachidoki.ma.kimgpicker.Utils.Code;
 import com.kachidoki.ma.kimgpicker.Utils.Utils;
 
 import java.util.ArrayList;
@@ -48,6 +44,8 @@ public class ImagePickAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         void onImageClick(ImgItem imageItem, int position);
 
         void onImageSelected(ImgItem imageItem, int position,boolean isAdd);
+
+        void onCameraClick();
     }
 
     public void setImgData(List<ImgItem> images) {
@@ -156,7 +154,7 @@ public class ImagePickAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         if (mSelectedImages.size()<selectLimit){
                             //可选
                             mSelectedImages.add(imageItem);
-                            listener.onImageSelected(imageItem,position,true);
+                            if (listener != null) listener.onImageSelected(imageItem,position,true);
                             mask.setVisibility(View.VISIBLE);
                         }else {
                             //超过数量 保持原样
@@ -167,7 +165,7 @@ public class ImagePickAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     } else {
                         //点的时候已经选了
                         mSelectedImages.remove(imageItem);
-                        listener.onImageSelected(imageItem,position,false);
+                        if (listener != null) listener.onImageSelected(imageItem,position,false);
                         mask.setVisibility(View.GONE);
                     }
                 }
@@ -206,11 +204,7 @@ public class ImagePickAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             mItemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (!ActivityUtils.checkPermission(Manifest.permission.CAMERA,context)) {
-                        ActivityCompat.requestPermissions((ImagePickActivity)context, new String[]{Manifest.permission.CAMERA}, Code.REQUEST_PERMISSION_CAMERA);
-                    } else {
-                        Utils.takePicture((ImagePickActivity)context, Code.REQUEST_CODE_TAKE,picker.getDataHolder().config.takeImageFile);
-                    }
+                    if (listener != null) listener.onCameraClick();
                 }
             });
         }

@@ -84,6 +84,13 @@ public class KIMGPicker {
     }
 
 
+    public static void GoTake(Activity context,int requestCode,String takeImagePath){
+        File takeImageFile = new File(takeImagePath);
+        takeImageFile = Utils.createFile(takeImageFile, "IMG_", ".jpg");
+        getInstance().dataHolder.setCacheTakeFile(takeImageFile);
+        Utils.takePicture(context,requestCode,takeImageFile);
+    }
+
 
 
 }
