@@ -132,7 +132,7 @@ public class ImagePickActivity extends AppCompatActivity implements View.OnClick
             }
         } else if (requestCode == Code.REQUEST_PERMISSION_CAMERA) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                KIMGPicker.GoTake(this, Code.REQUEST_CODE_TAKE,picker.getDataHolder().config.takeImageFile);
+                KIMGPicker.GoTake(this,picker.getDataHolder().config.takeImageFile);
             } else {
                 ActivityUtils.showToast("权限被禁止,无法打开相机",this);
             }
@@ -185,14 +185,14 @@ public class ImagePickActivity extends AppCompatActivity implements View.OnClick
                 popFolderWindow.showAtLocation(mFooterBar, Gravity.NO_GRAVITY, 0, 0);
             }
         } else if (id == R.id.tbConfirm){
-            //裁剪
+            //this click is just in multiSelect and selectCount > 0
+            setBackResult(picker.getDataHolder().getSelectedResult());
+            exit();
         } else if (id == R.id.tbBack){
-            finish();
+            onBackPressed();
         }
     }
 
-    //adapter的Click回调/select
-    @Override
     public void onImageClick(ImgItem imageItem, int position) {
         position = picker.getDataHolder().config.needCamera ? position - 1 : position;
         if (picker.getDataHolder().config.multiSelect) {
@@ -229,7 +229,7 @@ public class ImagePickActivity extends AppCompatActivity implements View.OnClick
         if (!ActivityUtils.checkPermission(Manifest.permission.CAMERA,this)) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, Code.REQUEST_PERMISSION_CAMERA);
         } else {
-            KIMGPicker.GoTake(this, Code.REQUEST_CODE_TAKE,picker.getDataHolder().config.takeImageFile);
+            KIMGPicker.GoTake(this,picker.getDataHolder().config.takeImageFile);
         }
     }
 
@@ -238,6 +238,36 @@ public class ImagePickActivity extends AppCompatActivity implements View.OnClick
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        if (requestCode==Code.REQUEST_CODE_TAKE&&resultCode==RESULT_OK){
+            //back from take picture,this will ignore the selected picture
+            setBackResult(picker.getDataHolder().getCacheResult());
+            exit();
+        }else if (requestCode==Code.REQUEST_CODE_CROP&&resultCode==RESULT_OK){
+            //back from take picture,this just happened in single select
+            setBackResult(picker.getDataHolder().getCacheResult());
+            exit();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (popFolderWindow!=null&&popFolderWindow.isShowing()){
+            popFolderWindow.dismiss();
+        }else {
+            exit();
+        }
+    }
+
+    private void exit(){
+        KIMGPicker.getInstance().clearCache();
+        finish();
+    }
+
+    private void setBackResult(ArrayList<String> result){
+        Intent backIntent = new Intent();
+        backIntent.putStringArrayListExtra(KIMGPicker.RESULT,result);
+        setResult(RESULT_OK,backIntent);
     }
 
 

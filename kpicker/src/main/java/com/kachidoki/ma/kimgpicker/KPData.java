@@ -33,6 +33,7 @@ public class KPData {
 
     public void clearCache(){
         if (previewCache!=null) previewCache.clear();
+        if (cacheTakeFile!=null) cacheTakeFile=null;
     }
 
     public KPConfig getConfig() {
@@ -76,8 +77,18 @@ public class KPData {
         }
     }
 
-    public String getCachePath(){
-        return cacheTakeFile.getAbsolutePath();
+    public ArrayList<String> getCacheResult(){
+        ArrayList<String> result = new ArrayList<>();
+        result.add(cacheTakeFile.getAbsolutePath());
+        return result;
+    }
+
+    public ArrayList<String> getSelectedResult(){
+        ArrayList<String> result = new ArrayList<>();
+        for (ImgItem img:selectedImg){
+            result.add(img.getPath());
+        }
+        return result;
     }
 
 }

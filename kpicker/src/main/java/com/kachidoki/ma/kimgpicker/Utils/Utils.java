@@ -122,33 +122,13 @@ public class Utils {
         context.sendBroadcast(mediaScanIntent);
     }
 
-//    public static void takePicture(Activity context, int requestCode,String takeImagePath) {
-//        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        takePictureIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        if (takePictureIntent.resolveActivity(context.getPackageManager()) != null) {
-//            File takeImageFile = new File(takeImagePath);
-//            takeImageFile = createFile(takeImageFile, "IMG_", ".jpg");
-//            if (takeImageFile != null) {
-//                Uri uri;
-//                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
-//                    uri = Uri.fromFile(takeImageFile);
-//                } else {
-//                    uri = FileProvider.getUriForFile(context, ProviderUtil.getFileProviderName(context), takeImageFile);
-//                    //加入uri权限 要不三星手机不能拍照
-//                    List<ResolveInfo> resInfoList = context.getPackageManager().queryIntentActivities
-//                            (takePictureIntent, PackageManager.MATCH_DEFAULT_ONLY);
-//                    for (ResolveInfo resolveInfo : resInfoList) {
-//                        String packageName = resolveInfo.activityInfo.packageName;
-//                        context.grantUriPermission(packageName, uri, Intent
-//                                .FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//                    }
-//                }
-//                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-//            }
-//        }
-//        context.startActivityForResult(takePictureIntent, requestCode);
-//    }
 
+    /**
+     * take pictures
+     * @param context
+     * @param requestCode
+     * @param takeImageFile
+     */
     public static void takePicture(Activity context, int requestCode,File takeImageFile) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         takePictureIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -164,8 +144,7 @@ public class Utils {
                             (takePictureIntent, PackageManager.MATCH_DEFAULT_ONLY);
                     for (ResolveInfo resolveInfo : resInfoList) {
                         String packageName = resolveInfo.activityInfo.packageName;
-                        context.grantUriPermission(packageName, uri, Intent
-                                .FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        context.grantUriPermission(packageName,uri,Intent.FLAG_GRANT_WRITE_URI_PERMISSION|Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     }
                 }
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);

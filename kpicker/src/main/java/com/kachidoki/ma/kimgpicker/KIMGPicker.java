@@ -23,6 +23,8 @@ import java.io.File;
 
 public class KIMGPicker {
 
+    public static final String RESULT = "KP_RESULE";
+
     private KPData dataHolder;
     private ImageLoader imageLoader;
 
@@ -48,26 +50,32 @@ public class KIMGPicker {
         dataHolder.clearSelectedImages();
     }
 
+    public void clearCache(){
+        dataHolder.clearCache();
+    }
+
     public void clearSelected(){
         dataHolder.clearSelectedImages();
     }
 
     //goPick
 
-    public static void GoPick(Context context,KPConfig config,ImageLoader loader){
-        GoPick(context,config,loader,false);
+    public static void GoPick(Activity context,KPConfig config,ImageLoader loader,int request){
+        GoPick(context,config,loader,request,false);
     }
 
-    public static void GoPick(Context context,KPConfig config,ImageLoader loader,boolean isuselast){
+    public static void GoPick(Activity context,KPConfig config,ImageLoader loader,int request,boolean isuselast){
         getInstance().getDataHolder().config=config;
         getInstance().imageLoader=loader;
         Intent intent = new Intent(context, ImagePickActivity.class);
         intent.putExtra(Code.EXTRA_USE_LASTSELECTED,isuselast);
-        context.startActivity(intent);
+        context.startActivityForResult(intent,request);
     }
 
     public static void GoCrop(Activity context, String imagePath) {
-        File outFile = Utils.createFile(new File(KIMGPicker.getInstance().dataHolder.config.cropCacheFolder),"",".jpg");
+        File outFile = Utils.createFile(new File(KIMGPicker.getInstance().dataHolder.config.cropCacheFolder),"crop_",".jpg");
+        //cache the file to return
+        getInstance().dataHolder.setCacheTakeFile(outFile);
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(Utils.getImageContentUri(context,new File(imagePath)), "image/*");
         intent.putExtra("crop", "true");
@@ -84,11 +92,11 @@ public class KIMGPicker {
     }
 
 
-    public static void GoTake(Activity context,int requestCode,String takeImagePath){
+    public static void GoTake(Activity context,String takeImagePath){
         File takeImageFile = new File(takeImagePath);
         takeImageFile = Utils.createFile(takeImageFile, "IMG_", ".jpg");
         getInstance().dataHolder.setCacheTakeFile(takeImageFile);
-        Utils.takePicture(context,requestCode,takeImageFile);
+        Utils.takePicture(context,Code.REQUEST_CODE_TAKE,takeImageFile);
     }
 
 

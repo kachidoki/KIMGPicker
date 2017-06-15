@@ -88,8 +88,8 @@ public class KPConfig {
      */
     public int aspectX = 1;
     public int aspectY = 1;
-    public int outputX = 500;
-    public int outputY = 500;
+    public int outputX = 400;
+    public int outputY = 400;
 
     public KPConfig(Builder builder) {
         this.needCrop = builder.needCrop;
@@ -140,13 +140,15 @@ public class KPConfig {
 
         public Builder(Context context) {
 
-            if (Utils.existSDCard())
+            if (Utils.existSDCard()){
                 takeImageFile = Environment.getExternalStorageDirectory().getAbsolutePath()+ "/DCIM/camera/";
-            else
+                // /sdcard/Android/data/<application package>/cache
+                cropCacheFolder = context.getExternalCacheDir().getPath();
+            } else{
                 takeImageFile = Environment.getDataDirectory().getAbsolutePath();
-
-            cropCacheFolder = context.getCacheDir().getAbsolutePath()+"/crop";
-
+                // /data/data/<application package>/cache
+                cropCacheFolder = context.getCacheDir().getPath();
+            }
 
             title = "选择图片";
             titleBgColor = Color.parseColor("#3F51B5");
