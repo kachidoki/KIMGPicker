@@ -95,8 +95,6 @@ public class ImagePickActivity extends AppCompatActivity implements View.OnClick
             btOk.setVisibility(View.GONE);
         }
         mFooterBar = findViewById(R.id.footer_bar);
-        //config 设置
-
     }
 
     public void initRecyclerView(){
