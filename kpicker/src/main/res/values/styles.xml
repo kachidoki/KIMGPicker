@@ -9,8 +9,5 @@
         <item name="android:fitsSystemWindows">false</item>
     </style>
 
-    <style name="CheckboxTheme" parent="@android:style/Widget.CompoundButton.CheckBox">
-        <item name="android:button">@drawable/selector_item_checked</item>
-    </style>
 
 </resources>

@@ -12,6 +12,7 @@ import com.kachidoki.ma.kimgpicker.Bean.ImgFolder;
 import com.kachidoki.ma.kimgpicker.KIMGPicker;
 import com.kachidoki.ma.kimgpicker.R;
 import com.kachidoki.ma.kimgpicker.Utils.Utils;
+import com.kachidoki.ma.kimgpicker.Widget.ColorCheckBox;
 import com.kachidoki.ma.kimgpicker.Widget.PopFolderWindow;
 
 import java.util.ArrayList;
@@ -83,14 +84,14 @@ public class PopFolderAdapter extends RecyclerView.Adapter<PopFolderAdapter.PopV
         ImageView cover;
         TextView folderName;
         TextView imageCount;
-        ImageView folderCheck;
+        ColorCheckBox folderCheck;
 
         public PopViewHolder(View itemView) {
             super(itemView);
             cover = (ImageView) itemView.findViewById(R.id.iv_cover);
             folderName = (TextView) itemView.findViewById(R.id.tv_folder_name);
             imageCount = (TextView) itemView.findViewById(R.id.tv_image_count);
-            folderCheck = (ImageView) itemView.findViewById(R.id.iv_folder_check);
+            folderCheck = (ColorCheckBox) itemView.findViewById(R.id.iv_folder_check);
         }
 
         public void setData(ImgFolder folder,int position){
@@ -100,6 +101,7 @@ public class PopFolderAdapter extends RecyclerView.Adapter<PopFolderAdapter.PopV
 
             if (lastSelsct == position) {
                 folderCheck.setVisibility(View.VISIBLE);
+                folderCheck.setChecked(true);
             } else {
                 folderCheck.setVisibility(View.INVISIBLE);
             }

@@ -27,6 +27,7 @@ import com.kachidoki.ma.kimgpicker.R;
 import com.kachidoki.ma.kimgpicker.Utils.ActivityUtils;
 import com.kachidoki.ma.kimgpicker.Utils.Code;
 import com.kachidoki.ma.kimgpicker.Utils.Utils;
+import com.kachidoki.ma.kimgpicker.Widget.DividerGridItemDecoration;
 import com.kachidoki.ma.kimgpicker.Widget.PopFolderWindow;
 
 import java.util.ArrayList;
@@ -94,6 +95,7 @@ public class ImagePickActivity extends ImageConfigActivity implements View.OnCli
         pickAdapter.setOnItemClickListener(this);
         recyclerView.setLayoutManager(new GridLayoutManager(this,3));
         recyclerView.setAdapter(pickAdapter);
+        recyclerView.addItemDecoration(new DividerGridItemDecoration(this));
         //pop
         popAdapter = new PopFolderAdapter(this);
     }
