@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.kachidoki.ma.kimgpicker.Widget.TouchViewPager
         android:id="@+id/viewpager"
@@ -10,13 +11,17 @@
 
     <include layout="@layout/include_titlebar"/>
 
-    <CheckBox
+    <com.kachidoki.ma.kimgpicker.Widget.ColorCheckBox
         android:id="@+id/ckSelect"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/TitleBar"
-        android:padding="5dp" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
+        app:color_background="@color/BlueDark"
+        app:color_border="@color/BlueTight"
+        app:size="32dp"/>
 
 
 </RelativeLayout>

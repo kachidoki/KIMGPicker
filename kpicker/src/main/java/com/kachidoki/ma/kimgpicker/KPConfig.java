@@ -43,10 +43,6 @@ public class KPConfig {
 
     public int statusBarColor = -1;
 
-    /**
-     * 返回图标资源
-     */
-    public int backResId = -1;
 
     /**
      * 标题
@@ -63,17 +59,15 @@ public class KPConfig {
      */
     public int titleBgColor;
 
-    public String btnText;
+    public int navigationColor;
+
+    public int allImageViewColor;
 
     /**
      * 确定按钮文字颜色
      */
     public int btnTextColor;
 
-    /**
-     * 确定按钮背景色
-     */
-    public int btnBgColor;
 
     public String allImagesText;
 
@@ -98,12 +92,11 @@ public class KPConfig {
         this.maxNum = builder.maxNum;
         this.needCamera = builder.needCamera;
         this.statusBarColor = builder.statusBarColor;
-        this.backResId = builder.backResId;
         this.title = builder.title;
         this.titleBgColor = builder.titleBgColor;
+        this.navigationColor = builder.navigationColor;
+        this.allImageViewColor = builder.allImageViewColor;
         this.titleColor = builder.titleColor;
-        this.btnText = builder.btnText;
-        this.btnBgColor = builder.btnBgColor;
         this.btnTextColor = builder.btnTextColor;
         this.allImagesText = builder.allImagesText;
         this.cropCacheFolder = builder.cropCacheFolder;
@@ -118,18 +111,27 @@ public class KPConfig {
 
         private boolean needCrop = false;
         private boolean multiSelect = true;
-        private boolean rememberSelected = true;
+        private boolean rememberSelected = false;
         private int maxNum = 9;
         private boolean needCamera = true;
-        public int statusBarColor = -1;
-        private int backResId = -1;
+
+
+        private int statusBarColor = -1;
+        private int titleBgColor = -1;
+
+        private int navigationColor = -1;
+
+        private int allImageViewColor = -1;
+
+
         private String title;
         private int titleColor;
-        private int titleBgColor;
-        private String btnText;
+
+
         private int btnTextColor;
-        private int btnBgColor;
+
         private String allImagesText;
+
         private String cropCacheFolder;
         private String takeImageFile;
 
@@ -151,11 +153,13 @@ public class KPConfig {
             }
 
             title = "选择图片";
-            titleBgColor = Color.parseColor("#3F51B5");
             titleColor = Color.WHITE;
+            statusBarColor = context.getResources().getColor(R.color.BlueDark);
+            titleBgColor = context.getResources().getColor(R.color.BlueTight);
+            allImageViewColor = context.getResources().getColor(R.color.ABlueTight
+            );
 
-            btnText = "确定";
-            btnBgColor = Color.TRANSPARENT;
+
             btnTextColor = Color.WHITE;
 
             allImagesText = "全部图片";
@@ -193,8 +197,18 @@ public class KPConfig {
             return this;
         }
 
-        public Builder backResId(int backResId) {
-            this.backResId = backResId;
+        public Builder titleBgColor(int titleBgColor) {
+            this.titleBgColor = titleBgColor;
+            return this;
+        }
+
+        public Builder navigationColor(int navigationColor) {
+            this.navigationColor = navigationColor;
+            return this;
+        }
+
+        public Builder allImageViewColor(int allImageViewColor) {
+            this.allImageViewColor = allImageViewColor;
             return this;
         }
 
@@ -208,25 +222,14 @@ public class KPConfig {
             return this;
         }
 
-        public Builder titleBgColor(int titleBgColor) {
-            this.titleBgColor = titleBgColor;
-            return this;
-        }
 
-        public Builder btnText(String btnText) {
-            this.btnText = btnText;
-            return this;
-        }
+
 
         public Builder btnTextColor(int btnTextColor) {
             this.btnTextColor = btnTextColor;
             return this;
         }
 
-        public Builder btnBgColor(int btnBgColor) {
-            this.btnBgColor = btnBgColor;
-            return this;
-        }
 
         public Builder allImagesText(String allImagesText) {
             this.allImagesText = allImagesText;

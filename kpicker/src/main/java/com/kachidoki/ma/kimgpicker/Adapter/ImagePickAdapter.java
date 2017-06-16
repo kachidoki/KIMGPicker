@@ -14,6 +14,7 @@ import com.kachidoki.ma.kimgpicker.KIMGPicker;
 import com.kachidoki.ma.kimgpicker.R;
 import com.kachidoki.ma.kimgpicker.Utils.ActivityUtils;
 import com.kachidoki.ma.kimgpicker.Utils.Utils;
+import com.kachidoki.ma.kimgpicker.Widget.ColorCheckBox;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -126,14 +127,18 @@ public class ImagePickAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         View rootView;
         ImageView ivThumb;
         View mask;
-        CheckBox cbCheck;
+        ColorCheckBox cbCheck;
 
         public ImageViewHolder(View itemView) {
             super(itemView);
             rootView = itemView;
             ivThumb = (ImageView) itemView.findViewById(R.id.iv_thumb);
             mask = itemView.findViewById(R.id.mask);
-            cbCheck = (CheckBox) itemView.findViewById(R.id.cb_check);
+            cbCheck = (ColorCheckBox) itemView.findViewById(R.id.cb_check);
+            //set color with config
+            cbCheck.setBorderColor(picker.getDataHolder().config.titleBgColor);
+            cbCheck.setCheckedColor(picker.getDataHolder().config.statusBarColor);
+
             itemView.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mImageSize));
         }
 
@@ -145,7 +150,7 @@ public class ImagePickAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     if (listener != null) listener.onImageClick(imageItem, position);
                 }
             });
-            cbCheck.setOnClickListener(new View.OnClickListener() {
+            cbCheck.setUserListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int selectLimit = picker.getDataHolder().getConfig().maxNum;

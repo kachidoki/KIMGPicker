@@ -4,7 +4,13 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
+    <color name="TcolorPrimary">#b43f51b5</color>
+
     <color name="bottom_bg">#aaaaaa</color>
+
+    <color name="BlueTight">#81a9c1</color>
+    <color name="ABlueTight">#be81a9c1</color>
+    <color name="BlueDark">#4e85a7</color>
 
     <color name="theme_body">#cc22292c</color>
     <color name="black">#000000</color>

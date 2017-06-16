@@ -36,16 +36,13 @@ import java.util.List;
  * Created by Kachidoki on 2017/6/13.
  */
 
-public class ImagePickActivity extends AppCompatActivity implements View.OnClickListener,LoaderCallBack, ImagePickAdapter.OnPickItemListener {
+public class ImagePickActivity extends ImageConfigActivity implements View.OnClickListener,LoaderCallBack, ImagePickAdapter.OnPickItemListener {
 
-    private KIMGPicker picker;
     private boolean first=false;
 
     //.....view
-    private Button btOk;
     private Button btDir;
     private View mFooterBar;
-    private TextView title;
     private RecyclerView recyclerView;
     //---------
     private PopFolderWindow popFolderWindow;
@@ -56,22 +53,15 @@ public class ImagePickActivity extends AppCompatActivity implements View.OnClick
     private List<ImgFolder> folderList;
 
 
-
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void createInit(){
         setContentView(R.layout.activity_img_pick);
-        picker = KIMGPicker.getInstance();
-
         Intent intent = getIntent();
         if (!intent.getBooleanExtra(Code.EXTRA_USE_LASTSELECTED,false)){
             picker.getDataHolder().newSelect();
         }
-
-        initView();
-        initRecyclerView();
-        requestPermissions();
     }
+
 
     @Override
     protected void onResume() {
@@ -82,19 +72,20 @@ public class ImagePickActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
+    @Override
     public void initView(){
-        btOk = (Button) findViewById(R.id.tbConfirm);
         btOk.setOnClickListener(this);
         btDir = (Button) findViewById(R.id.btn_dir);
         btDir.setOnClickListener(this);
-        findViewById(R.id.tbBack).setOnClickListener(this);
-        title = (TextView) findViewById(R.id.tvTitle);
-        if (picker.getDataHolder().config.multiSelect) {
-            btOk.setVisibility(View.VISIBLE);
-        } else {
-            btOk.setVisibility(View.GONE);
-        }
+        btBack.setOnClickListener(this);
         mFooterBar = findViewById(R.id.footer_bar);
+        //set title with config
+        title.setText(config.title);
+        mFooterBar.setBackgroundColor(config.allImageViewColor);
+        btDir.setText(config.allImagesText);
+
+        initRecyclerView();
+        requestPermissions();
     }
 
     public void initRecyclerView(){
@@ -110,12 +101,12 @@ public class ImagePickActivity extends AppCompatActivity implements View.OnClick
     public void requestPermissions(){
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {
             if (ActivityUtils.checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE,this)) {
-                new ImgDataLoder(this, null, this);
+                new ImgDataLoder(this, null, this,config.allImagesText);
             } else {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, Code.REQUEST_PERMISSION_STORAGE);
             }
         }else{
-            new ImgDataLoder(this, null, this);
+            new ImgDataLoder(this, null, this,config.allImagesText);
         }
     }
 
@@ -124,7 +115,7 @@ public class ImagePickActivity extends AppCompatActivity implements View.OnClick
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == Code.REQUEST_PERMISSION_STORAGE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                new ImgDataLoder(this, null, this);
+                new ImgDataLoder(this, null, this,config.allImagesText);
             } else {
                 ActivityUtils.showToast("权限被禁止,无法选择本地图片",this);
             }

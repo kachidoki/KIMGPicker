@@ -1,8 +1,10 @@
 package com.kachidoki.ma.kimgpicker.UI;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -32,15 +34,29 @@ public abstract class ImageConfigActivity extends AppCompatActivity {
 
         picker = KIMGPicker.getInstance();
         config = picker.getDataHolder().config;
-
+        createInit();
         titleBar = findViewById(R.id.TitleBar);
         btOk = (Button) findViewById(R.id.tbConfirm);
         btBack = (ImageView) findViewById(R.id.tbBack);
         title = (TextView) findViewById(R.id.tvTitle);
-
+        initView();
         //set the theme with the config
+        if (Build.VERSION.SDK_INT >= 21) {
+            if (config.navigationColor!=-1) getWindow().setNavigationBarColor(config.navigationColor);
+            getWindow().setStatusBarColor(config.statusBarColor);
+        }
+        titleBar.setBackgroundColor(config.titleBgColor);
+        title.setTextColor(config.titleColor);
+        btOk.setTextColor(config.btnTextColor);
+        if (config.multiSelect) {
+            btOk.setVisibility(View.VISIBLE);
+        } else {
+            btOk.setVisibility(View.GONE);
+        }
 
     }
+
+    abstract void createInit();
 
     abstract void initView();
 }

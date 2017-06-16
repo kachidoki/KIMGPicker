@@ -10,6 +10,7 @@ import android.provider.MediaStore;
 
 import com.kachidoki.ma.kimgpicker.Bean.ImgFolder;
 import com.kachidoki.ma.kimgpicker.Bean.ImgItem;
+import com.kachidoki.ma.kimgpicker.KIMGPicker;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -35,8 +36,9 @@ public class ImgDataLoder implements LoaderManager.LoaderCallbacks<Cursor> {
     private Activity context;
     private LoaderCallBack callBack;
     private List<ImgFolder> imgFolders;
+    private String allPictureName;
 
-    public ImgDataLoder(Activity context,String path,LoaderCallBack call){
+    public ImgDataLoder(Activity context,String path,LoaderCallBack call,String allpicture){
         this.context=context;
         this.callBack=call;
         LoaderManager loaderManager = context.getLoaderManager();
@@ -48,6 +50,7 @@ public class ImgDataLoder implements LoaderManager.LoaderCallbacks<Cursor> {
             loaderManager.initLoader(LOAD_ALL,null,this);
         }
         imgFolders=new ArrayList<>();
+        this.allPictureName = allpicture;
     }
 
 
@@ -100,7 +103,7 @@ public class ImgDataLoder implements LoaderManager.LoaderCallbacks<Cursor> {
                 }
             }
             if (data.getCount()>0){
-                ImgFolder allImgsFolder = new ImgFolder("全部图片","/");
+                ImgFolder allImgsFolder = new ImgFolder(allPictureName,"/");
                 allImgsFolder.setCover(allImg.get(0));
                 allImgsFolder.setImgs(allImg);
                 imgFolders.add(0,allImgsFolder);
