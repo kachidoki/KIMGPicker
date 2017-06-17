@@ -46,7 +46,7 @@ public class PopFolderWindow extends PopupWindow implements View.OnClickListener
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         setContentView(view);
-        setWidth(ViewGroup.LayoutParams.MATCH_PARENT);  //如果不设置，就是 AnchorView 的宽度
+        setWidth(ViewGroup.LayoutParams.MATCH_PARENT);  //If not set, this is the width of AnchorView
         setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
         setFocusable(true);
         setOutsideTouchable(true);

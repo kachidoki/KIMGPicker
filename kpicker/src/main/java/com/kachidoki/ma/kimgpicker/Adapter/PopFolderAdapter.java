@@ -96,7 +96,7 @@ public class PopFolderAdapter extends RecyclerView.Adapter<PopFolderAdapter.PopV
 
         public void setData(ImgFolder folder,int position){
             folderName.setText(folder.getName());
-            imageCount.setText("共"+folder.getImgs().size()+"张照片");
+            imageCount.setText(context.getString(R.string.all_image_count,folder.getImgs().size()));
             picker.getImageLoader().displayImage(context, folder.getCover().getPath(), cover, imageSize, imageSize);
 
             if (lastSelsct == position) {

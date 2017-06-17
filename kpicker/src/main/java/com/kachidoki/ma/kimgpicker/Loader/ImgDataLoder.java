@@ -23,13 +23,13 @@ import java.util.List;
 public class ImgDataLoder implements LoaderManager.LoaderCallbacks<Cursor> {
     public static final int LOAD_ALL = 0;
     public static final int LOAD_PATH = 1;
-    private final String[] IMAGE_PROJECTION = {     //查询图片需要的数据列
-            MediaStore.Images.Media.DISPLAY_NAME,   //图片的显示名称  aaa.jpg
-            MediaStore.Images.Media.DATA,           //图片的真实路径  /storage/emulated/0/pp/downloader/wallpaper/aaa.jpg
-            MediaStore.Images.Media.SIZE,           //图片的大小，long型  132492
-            MediaStore.Images.Media.WIDTH,          //图片的宽度，int型  1920
-            MediaStore.Images.Media.HEIGHT,         //图片的高度，int型  1080
-            MediaStore.Images.Media.MIME_TYPE,      //图片的类型     image/jpeg
+    private final String[] IMAGE_PROJECTION = {     //Image Column
+            MediaStore.Images.Media.DISPLAY_NAME,   //name  aaa.jpg
+            MediaStore.Images.Media.DATA,           //path
+            MediaStore.Images.Media.SIZE,           //size , long
+            MediaStore.Images.Media.WIDTH,          //width , int
+            MediaStore.Images.Media.HEIGHT,         //height , int
+            MediaStore.Images.Media.MIME_TYPE,      //type   image/jpeg
             MediaStore.Images.Media.DATE_ADDED
     };
 

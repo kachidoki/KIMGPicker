@@ -1,6 +1,5 @@
 package com.kachidoki.ma.kimgpicker.Adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
 import android.util.DisplayMetrics;
@@ -12,7 +11,6 @@ import com.kachidoki.ma.kimgpicker.KIMGPicker;
 import com.kachidoki.ma.kimgpicker.UI.ImagePreviewActivity;
 import com.kachidoki.ma.kimgpicker.Utils.Utils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import uk.co.senab.photoview.PhotoView;

@@ -13,7 +13,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.util.DisplayMetrics;
-import android.util.Log;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -28,8 +27,9 @@ import java.util.Locale;
 public class Utils {
 
     /**
-     * 获得状态栏的高度
-     *
+     * Get the height of the status bar
+     * @param context
+     * @return
      */
     public static int getStatusHeight(Context context) {
         int statusHeight = -1;
@@ -45,8 +45,10 @@ public class Utils {
     }
 
     /**
-     * 根据屏幕宽度与密度计算GridView显示的列数， 最少为三列，并获取Item宽度
-     *
+     * Calculate the number of columns displayed by the GridView based on the width and density of the screen,
+     *  at least three columns, and get the Item width
+     * @param context
+     * @return
      */
     public static int getImageItemWidth(Context context) {
         int screenWidth = context.getResources().getDisplayMetrics().widthPixels;
@@ -57,8 +59,11 @@ public class Utils {
         return (screenWidth - columnSpace * (cols - 1)) / cols;
     }
 
+
     /**
-     * 获取手机大小（分辨率）
+     * Get phone size (resolution)
+     * @param activity
+     * @return
      */
     public static DisplayMetrics getScreenPix(Activity activity) {
         DisplayMetrics displaysMetrics = new DisplayMetrics();
@@ -66,16 +71,20 @@ public class Utils {
         return displaysMetrics;
     }
 
-
     /**
-     * 判断SDCard是否可用
+     * Determine if SDCard is available
+     * @return
      */
     public static boolean existSDCard() {
         return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
     }
 
     /**
-     * 根据系统时间、前缀、后缀产生一个文件
+     * Generates a file based on system time, prefix, and suffix
+     * @param folder
+     * @param prefix
+     * @param suffix
+     * @return
      */
     public static File createFile(File folder, String prefix, String suffix) {
         if (!folder.exists() || !folder.isDirectory()) folder.mkdirs();
@@ -85,7 +94,7 @@ public class Utils {
     }
 
     /**
-     * 变成Content Uri
+     * change ordinary path to context uri
      * @param context
      * @param imageFile
      * @return
@@ -112,8 +121,11 @@ public class Utils {
             }
         }
     }
+
     /**
-     * 通知Media新增图片
+     * Notify Media to add a picture
+     * @param context
+     * @param file
      */
     public static void galleryAddPic(Context context, File file) {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
@@ -139,7 +151,7 @@ public class Utils {
                     uri = Uri.fromFile(takeImageFile);
                 } else {
                     uri = FileProvider.getUriForFile(context, ProviderUtil.getFileProviderName(context), takeImageFile);
-                    //加入uri权限 要不三星手机不能拍照
+                    // Join uri permission or Samsung phone can not take pictures
                     List<ResolveInfo> resInfoList = context.getPackageManager().queryIntentActivities
                             (takePictureIntent, PackageManager.MATCH_DEFAULT_ONLY);
                     for (ResolveInfo resolveInfo : resInfoList) {

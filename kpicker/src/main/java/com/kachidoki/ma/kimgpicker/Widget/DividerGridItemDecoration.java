@@ -59,8 +59,7 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
             final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child
                     .getLayoutParams();
             final int left = child.getLeft() - params.leftMargin;
-            final int right = child.getRight() + params.rightMargin
-                    + mDivider.getIntrinsicWidth();
+            final int right = child.getRight() + params.rightMargin + mDivider.getIntrinsicWidth();
             final int top = child.getBottom() + params.bottomMargin;
             final int bottom = top + mDivider.getIntrinsicHeight();
             mDivider.setBounds(left, top, right, bottom);
@@ -73,8 +72,7 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
         for (int i = 0; i < childCount; i++) {
             final View child = parent.getChildAt(i);
 
-            final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child
-                    .getLayoutParams();
+            final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
             final int top = child.getTop() - params.topMargin;
             final int bottom = child.getBottom() + params.bottomMargin;
             final int left = child.getRight() + params.rightMargin;
@@ -88,20 +86,20 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
     private boolean isLastColum(RecyclerView parent, int pos, int spanCount,int childCount) {
         LayoutManager layoutManager = parent.getLayoutManager();
         if (layoutManager instanceof GridLayoutManager) {
-            // 如果是最后一列，则不需要绘制右边
+            // If it is the last column, you do not need to draw the right
             if ((pos + 1) % spanCount == 0) {
                 return true;
             }
         } else if (layoutManager instanceof StaggeredGridLayoutManager) {
             int orientation = ((StaggeredGridLayoutManager) layoutManager).getOrientation();
             if (orientation == StaggeredGridLayoutManager.VERTICAL) {
-                // 如果是最后一列，则不需要绘制右边
+                // If it is the last column, you do not need to draw the right
                 if ((pos + 1) % spanCount == 0){
                     return true;
                 }
             } else {
                 childCount = childCount - childCount % spanCount;
-                if (pos >= childCount)// 如果是最后一列，则不需要绘制右边
+                if (pos >= childCount)// If it is the last column, you do not need to draw the right
                     return true;
             }
         }
@@ -112,20 +110,20 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
         LayoutManager layoutManager = parent.getLayoutManager();
         if (layoutManager instanceof GridLayoutManager) {
             childCount = childCount - childCount % spanCount;
-            if (pos >= childCount)// 如果是最后一行，则不需要绘制底部
+            if (pos >= childCount)// If it is the last line, you do not need to draw the bottom
                 return true;
         } else if (layoutManager instanceof StaggeredGridLayoutManager) {
             int orientation = ((StaggeredGridLayoutManager) layoutManager)
                     .getOrientation();
-            // StaggeredGridLayoutManager 且纵向滚动
+            // StaggeredGridLayoutManager Scroll Vertical
             if (orientation == StaggeredGridLayoutManager.VERTICAL) {
                 childCount = childCount - childCount % spanCount;
-                // 如果是最后一行，则不需要绘制底部
+                // If it is the last line, you do not need to draw the bottom
                 if (pos >= childCount)
                     return true;
             } else{
-                // StaggeredGridLayoutManager 且横向滚动
-                // 如果是最后一行，则不需要绘制底部
+                // StaggeredGridLayoutManager Scroll horizontally
+                // If it is the last line, you do not need to draw the bottom
                 if ((pos + 1) % spanCount == 0) {
                     return true;
                 }
@@ -138,11 +136,11 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
     public void getItemOffsets(Rect outRect, int itemPosition,RecyclerView parent) {
         int spanCount = getSpanCount(parent);
         int childCount = parent.getAdapter().getItemCount();
-        // 如果是最后一行，则不需要绘制底部
+        // If it is the last line, you do not need to draw the bottom
         if (isLastRaw(parent, itemPosition, spanCount, childCount)){
             outRect.set(0, 0, mDivider.getIntrinsicWidth(), 0);
         } else if (isLastColum(parent, itemPosition, spanCount, childCount)) {
-            // 如果是最后一列，则不需要绘制右边
+            // If it is the last column, you do not need to draw the right
             outRect.set(0, 0, 0, mDivider.getIntrinsicHeight());
         } else {
             outRect.set(0, 0, mDivider.getIntrinsicWidth(), mDivider.getIntrinsicHeight());

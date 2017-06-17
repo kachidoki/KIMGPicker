@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 
 import com.kachidoki.ma.kimgpicker.Bean.ImgItem;
@@ -25,16 +24,16 @@ import java.util.List;
 
 public class ImagePickAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
-    private static final int ITEM_TYPE_CAMERA = 0;  //第一个条目是相机
-    private static final int ITEM_TYPE_NORMAL = 1;  //第一个条目不是相机
+    private static final int ITEM_TYPE_CAMERA = 0;  //first is camera
+    private static final int ITEM_TYPE_NORMAL = 1;  //first is not camera
 
     private KIMGPicker picker;
     private Context context;
     private OnPickItemListener listener;
-    private List<ImgItem> images;       //当前需要显示的所有的图片数据
-    private List<ImgItem> mSelectedImages; //全局保存的已经选中的图片数据
-    private boolean isShowCamera;         //是否显示拍照按钮
-    private int mImageSize;               //每个条目的大小
+    private List<ImgItem> images;
+    private List<ImgItem> mSelectedImages;
+    private boolean isShowCamera;
+    private int mImageSize;               //item size
 
     public void setOnItemClickListener(OnPickItemListener listener) {
         this.listener = listener;
@@ -117,11 +116,6 @@ public class ImagePickAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
 
 
-
-
-
-
-
     private class ImageViewHolder extends RecyclerView.ViewHolder {
 
         View rootView;
@@ -155,27 +149,27 @@ public class ImagePickAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 public void onClick(View v) {
                     int selectLimit = picker.getDataHolder().getConfig().maxNum;
                     if (cbCheck.isChecked()) {
-                        //点的时候是没选
+                        // when click, the item is not choose
                         if (mSelectedImages.size()<selectLimit){
-                            //可选
+                            // can choose
                             mSelectedImages.add(imageItem);
                             if (listener != null) listener.onImageSelected(imageItem,position,true);
                             mask.setVisibility(View.VISIBLE);
                         }else {
-                            //超过数量 保持原样
-                            ActivityUtils.showToast("最多选择"+selectLimit+"张图片",context);
+                            // more than limit, keep num
+                            ActivityUtils.showToast(context.getString(R.string.select_limit,selectLimit),context);
                             cbCheck.setChecked(false);
                             mask.setVisibility(View.GONE);
                         }
                     } else {
-                        //点的时候已经选了
+                        // when click, the item is choose
                         mSelectedImages.remove(imageItem);
                         if (listener != null) listener.onImageSelected(imageItem,position,false);
                         mask.setVisibility(View.GONE);
                     }
                 }
             });
-            //根据是否多选，显示或隐藏checkbox
+            // show or not show the checkbox with multiSelect
             if (picker.getDataHolder().config.multiSelect) {
                 cbCheck.setVisibility(View.VISIBLE);
                 boolean selected = mSelectedImages.contains(imageItem);
@@ -189,7 +183,8 @@ public class ImagePickAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             } else {
                 cbCheck.setVisibility(View.GONE);
             }
-            picker.getImageLoader().displayImage(context, imageItem.getPath(), ivThumb, mImageSize, mImageSize); //显示图片
+            // use imageLoader display the picture
+            picker.getImageLoader().displayImage(context, imageItem.getPath(), ivThumb, mImageSize, mImageSize);
         }
 
     }
@@ -204,7 +199,8 @@ public class ImagePickAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
 
         public void setCamera(){
-            mItemView.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mImageSize)); //让图片是个正方形
+            // set size
+            mItemView.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mImageSize));
             mItemView.setTag(null);
             mItemView.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -4,10 +4,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Environment;
 
-import com.kachidoki.ma.kimgpicker.Loader.ImageLoader;
 import com.kachidoki.ma.kimgpicker.Utils.Utils;
 
-import java.io.File;
 import java.io.Serializable;
 
 /**
@@ -17,54 +15,48 @@ import java.io.Serializable;
 public class KPConfig {
 
     /**
-     * 是否需要裁剪
+     * Whether it needs to be cut
      */
     public boolean needCrop;
 
     /**
-     * 是否多选
+     * Whether to choose more
      */
-    public boolean multiSelect = false;
+    public boolean multiSelect;
 
     /**
-     * 是否记住上次的选中记录(只对多选有效)
+     * Remember whether the last selected record (valid only for multiple elections)
      */
-    public boolean rememberSelected = true;
+    public boolean rememberSelected;
 
     /**
-     * 最多选择图片数
+     * Choose the maximum number of images
      */
-    public int maxNum = 9;
+    public int maxNum;
 
     /**
-     * 第一个item是否显示相机
+     * Does the first item show the camera
      */
     public boolean needCamera;
 
-    public int statusBarColor = -1;
-
 
     /**
-     * 标题
+     * theme color need user to set
      */
-    public String title;
-
-    /**
-     * 标题颜色
-     */
-    public int titleColor;
-
-    /**
-     * titlebar背景色
-     */
+    public int statusBarColor;
     public int titleBgColor;
-
     public int navigationColor;
-
     public int allImageViewColor;
 
     /**
-     * 确定按钮文字颜色
+     * title
+     */
+    public String title;
+    public int titleColor;
+
+
+    /**
+     * okButton text color
      */
     public int btnTextColor;
 
@@ -72,18 +64,18 @@ public class KPConfig {
     public String allImagesText;
 
     /**
-     * 拍照存储路径
+     * photo storage path
      */
     public String cropCacheFolder;
     public String takeImageFile;
 
     /**
-     * 裁剪输出大小
+     * Trim output size
      */
-    public int aspectX = 1;
-    public int aspectY = 1;
-    public int outputX = 400;
-    public int outputY = 400;
+    public int aspectX;
+    public int aspectY;
+    public int outputX;
+    public int outputY;
 
     public KPConfig(Builder builder) {
         this.needCrop = builder.needCrop;
@@ -152,17 +144,16 @@ public class KPConfig {
                 cropCacheFolder = context.getCacheDir().getPath();
             }
 
-            title = "选择图片";
+            title = context.getString(R.string.pick_img);
             titleColor = Color.WHITE;
             statusBarColor = context.getResources().getColor(R.color.BlueDark);
             titleBgColor = context.getResources().getColor(R.color.BlueTight);
-            allImageViewColor = context.getResources().getColor(R.color.ABlueTight
-            );
+            allImageViewColor = context.getResources().getColor(R.color.ABlueTight);
 
 
             btnTextColor = Color.WHITE;
 
-            allImagesText = "全部图片";
+            allImagesText = context.getString(R.string.all_img);
 
 
         }
@@ -223,8 +214,6 @@ public class KPConfig {
         }
 
 
-
-
         public Builder btnTextColor(int btnTextColor) {
             this.btnTextColor = btnTextColor;
             return this;
@@ -235,6 +224,17 @@ public class KPConfig {
             this.allImagesText = allImagesText;
             return this;
         }
+
+        public Builder cropCacheFolder(String cropCacheFolder) {
+            this.cropCacheFolder = cropCacheFolder;
+            return this;
+        }
+
+        public Builder takeImageFile(String takeImageFile) {
+            this.takeImageFile = takeImageFile;
+            return this;
+        }
+
 
 
         public Builder cropSize(int aspectX, int aspectY, int outputX, int outputY) {
