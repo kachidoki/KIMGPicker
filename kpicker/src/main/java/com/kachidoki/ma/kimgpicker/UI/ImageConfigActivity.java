@@ -56,6 +56,28 @@ public abstract class ImageConfigActivity extends AppCompatActivity {
 
     }
 
+    protected void statusBarColorTransparent(){
+        if (Build.VERSION.SDK_INT >= 21) {
+            getWindow().setStatusBarColor(getResources().getColor(R.color.transparent));
+        }
+    }
+
+    protected void statusBarColorUser(){
+        if (Build.VERSION.SDK_INT >= 21) {
+            getWindow().setStatusBarColor(config.statusBarColor);
+        }
+    }
+
+    protected void setOkText(){
+        if (picker.getDataHolder().getSelectImageCount()>0){
+            btOk.setText(getString(R.string.select_complete,picker.getDataHolder().getSelectImageCount()));
+            btOk.setEnabled(true);
+        }else {
+            btOk.setText(getString(R.string.complete));
+            btOk.setEnabled(false);
+        }
+    }
+
     abstract void createInit();
 
     abstract void initView();

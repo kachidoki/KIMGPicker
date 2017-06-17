@@ -4,17 +4,13 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.kachidoki.ma.kimgpicker.Adapter.ImagePickAdapter;
 import com.kachidoki.ma.kimgpicker.Adapter.PopFolderAdapter;
@@ -26,7 +22,6 @@ import com.kachidoki.ma.kimgpicker.Loader.LoaderCallBack;
 import com.kachidoki.ma.kimgpicker.R;
 import com.kachidoki.ma.kimgpicker.Utils.ActivityUtils;
 import com.kachidoki.ma.kimgpicker.Utils.Code;
-import com.kachidoki.ma.kimgpicker.Utils.Utils;
 import com.kachidoki.ma.kimgpicker.Widget.DividerGridItemDecoration;
 import com.kachidoki.ma.kimgpicker.Widget.PopFolderWindow;
 
@@ -41,13 +36,12 @@ public class ImagePickActivity extends ImageConfigActivity implements View.OnCli
 
     private boolean first=false;
 
-    //.....view
     private Button btDir;
     private View mFooterBar;
     private RecyclerView recyclerView;
-    //---------
+
     private PopFolderWindow popFolderWindow;
-    //Adapter
+
     private ImagePickAdapter pickAdapter;
     private PopFolderAdapter popAdapter;
 
@@ -84,6 +78,7 @@ public class ImagePickActivity extends ImageConfigActivity implements View.OnCli
         title.setText(config.title);
         mFooterBar.setBackgroundColor(config.allImageViewColor);
         btDir.setText(config.allImagesText);
+        setOkText();
 
         initRecyclerView();
         requestPermissions();
@@ -119,13 +114,13 @@ public class ImagePickActivity extends ImageConfigActivity implements View.OnCli
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 new ImgDataLoder(this, null, this,config.allImagesText);
             } else {
-                ActivityUtils.showToast("权限被禁止,无法选择本地图片",this);
+                ActivityUtils.showToast(getString(R.string.img_permissions_limit),this);
             }
         } else if (requestCode == Code.REQUEST_PERMISSION_CAMERA) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 KIMGPicker.GoTake(this,picker.getDataHolder().config.takeImageFile);
             } else {
-                ActivityUtils.showToast("权限被禁止,无法打开相机",this);
+                ActivityUtils.showToast(getString(R.string.take_permissions_limit),this);
             }
         }
     }
@@ -163,13 +158,13 @@ public class ImagePickActivity extends ImageConfigActivity implements View.OnCli
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_dir) {
-            //点击文件夹按钮
+            //click the folder
             if (folderList == null) {
-                ActivityUtils.showToast("没有图片",this);
+                ActivityUtils.showToast(getString(R.string.no_img),this);
                 return;
             }
             createPopFolderList();
-            popAdapter.setFolders(folderList);  //刷新数据??
+            popAdapter.setFolders(folderList);  //refresh
             if (popFolderWindow.isShowing()) {
                 popFolderWindow.dismiss();
             } else {
@@ -187,31 +182,32 @@ public class ImagePickActivity extends ImageConfigActivity implements View.OnCli
     public void onImageClick(ImgItem imageItem, int position) {
         position = picker.getDataHolder().config.needCamera ? position - 1 : position;
         if (picker.getDataHolder().config.multiSelect) {
-            //多选去预览画面
+            // multiSelect go Preview
             picker.getDataHolder().setPreCache(pickAdapter.getImgData());
-            ImagePreviewActivity.GoPreview(this,position);
+            ImagePreviewActivity.GoPreview(this,position,Code.REQUEST_CODE_PREVIEW);
         } else {
             if (picker.getDataHolder().config.needCrop) {
-                //去裁剪
+                // go crop
                 KIMGPicker.GoCrop(this,imageItem.getPath());
             } else {
-                //不裁剪返回
-                finish();
+                // single and not crop, add imageItem finish
+                setBackResult(picker.getDataHolder().getSelectedSingleResult(imageItem));
+                exit();
             }
         }
     }
 
     @Override
     public void onImageSelected(ImgItem imageItem, int position,boolean isAdd) {
-        int maxCount = picker.getDataHolder().config.maxNum;
-        //增加了一个
+        // add one
         if (picker.getDataHolder().getSelectImageCount() > 0) {
-            btOk.setText("完成("+picker.getDataHolder().getSelectImageCount()+"/"+maxCount+")");
+            btOk.setText(getString(R.string.select_complete,picker.getDataHolder().getSelectImageCount()));
             btOk.setEnabled(true);
         } else {
-            btOk.setText("完成");
+            btOk.setText(getString(R.string.complete));
             btOk.setEnabled(false);
         }
+        setOkText();
     }
 
 
@@ -229,13 +225,17 @@ public class ImagePickActivity extends ImageConfigActivity implements View.OnCli
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode==Code.REQUEST_CODE_TAKE&&resultCode==RESULT_OK){
+        if (requestCode == Code.REQUEST_CODE_TAKE&&resultCode == RESULT_OK){
             //back from take picture,this will ignore the selected picture
             setBackResult(picker.getDataHolder().getCacheResult());
             exit();
-        }else if (requestCode==Code.REQUEST_CODE_CROP&&resultCode==RESULT_OK){
+        }else if (requestCode == Code.REQUEST_CODE_CROP&&resultCode == RESULT_OK){
             //back from take picture,this just happened in single select
             setBackResult(picker.getDataHolder().getCacheResult());
+            exit();
+        }else if (requestCode == Code.REQUEST_CODE_PREVIEW&&resultCode == RESULT_OK){
+            //back from preview,just happen in multiSelect,and is selected,just finish
+            setBackResult(picker.getDataHolder().getSelectedResult());
             exit();
         }
     }

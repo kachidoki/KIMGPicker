@@ -91,4 +91,10 @@ public class KPData {
         return result;
     }
 
+    public ArrayList<String> getSelectedSingleResult(ImgItem imgItem){
+        ArrayList<String> result = new ArrayList<>();
+        result.add(imgItem.getPath());
+        return result;
+    }
+
 }

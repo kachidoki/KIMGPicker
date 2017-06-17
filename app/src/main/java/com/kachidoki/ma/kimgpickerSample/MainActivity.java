@@ -32,11 +32,11 @@ public class MainActivity extends AppCompatActivity {
         final KPConfig single = new KPConfig.Builder(this)
                                     .needCamera(true)
                                     .multiSelect(false)
-                                    .needCrop(true)
+                                    .needCrop(false)
                                     .build();
 
         final KPConfig multi = new KPConfig.Builder(this)
-                .needCamera(true)
+                .needCamera(false)
                 .multiSelect(true)
                 .needCrop(false)
                 .build();

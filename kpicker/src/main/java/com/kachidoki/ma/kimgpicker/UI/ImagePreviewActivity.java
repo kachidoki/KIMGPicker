@@ -1,9 +1,11 @@
 package com.kachidoki.ma.kimgpicker.UI;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 
 import com.kachidoki.ma.kimgpicker.Adapter.ImagePreviewAdapter;
 import com.kachidoki.ma.kimgpicker.Bean.ImgItem;
@@ -19,7 +21,7 @@ import java.util.List;
  * Created by Kachidoki on 2017/6/13.
  */
 
-public class ImagePreviewActivity extends ImageConfigActivity implements View.OnClickListener {
+public class ImagePreviewActivity extends ImageConfigActivity implements View.OnClickListener, ImagePreviewAdapter.PhotoClickListener {
 
 
     private ColorCheckBox ckSelect;
@@ -50,7 +52,7 @@ public class ImagePreviewActivity extends ImageConfigActivity implements View.On
         ckSelect.setUserListener(this);
         boolean isSelect = picker.getDataHolder().isSelect(previewImgs.get(mCurrentPosition));
         ckSelect.setChecked(isSelect);
-        title.setText(mCurrentPosition+"/"+previewImgs.size());
+        title.setText(getString(R.string.preview_image_count,mCurrentPosition,previewImgs.size()));
         initAdapter();
     }
 
@@ -63,12 +65,7 @@ public class ImagePreviewActivity extends ImageConfigActivity implements View.On
 
     private void initAdapter(){
         mAdapter = new ImagePreviewAdapter(this, previewImgs);
-        mAdapter.setPhotoViewClickListener(new ImagePreviewAdapter.PhotoClickListener() {
-            @Override
-            public void OnPhotoClick(ImgItem imgItem) {
-                //收起标题
-            }
-        });
+        mAdapter.setPhotoViewClickListener(this);
         viewPager.setAdapter(mAdapter);
         viewPager.setCurrentItem(mCurrentPosition, false);
         viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
@@ -78,7 +75,7 @@ public class ImagePreviewActivity extends ImageConfigActivity implements View.On
                 mCurrentPosition = position;
                 boolean isSelect = picker.getDataHolder().isSelect(previewImgs.get(position));
                 ckSelect.setChecked(isSelect);
-                title.setText(mCurrentPosition+"/"+previewImgs.size());
+                title.setText(getString(R.string.preview_image_count,mCurrentPosition,previewImgs.size()));
             }
         });
         viewPager.setCurrentItem(mCurrentPosition);
@@ -88,34 +85,48 @@ public class ImagePreviewActivity extends ImageConfigActivity implements View.On
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.ckSelect){
+            //just happen in multiSelect
             if (ckSelect.isChecked()) {
                 if (selectedImages.size()<maxSelect){
                     selectedImages.add(previewImgs.get(mCurrentPosition));
                 }else {
-                    ActivityUtils.showToast("最多选择"+maxSelect+"张图片",this);
+                    ActivityUtils.showToast(getString(R.string.select_limit,maxSelect),this);
                     ckSelect.setChecked(false);
                 }
             } else {
                 selectedImages.remove(previewImgs.get(mCurrentPosition));
             }
             setOkText();
+        }else if (id == R.id.tbConfirm){
+            setResult(RESULT_OK);
+            finish();
+        }else if (id == R.id.tbBack){
+            finish();
         }
     }
 
-    private void setOkText(){
-        if (selectedImages.size()>0){
-            btOk.setText("完成("+selectedImages.size()+"/"+maxSelect+")");
-            btOk.setEnabled(true);
+    @Override
+    public void OnPhotoClick(ImgItem imgItem) {
+        if (titleBar.getVisibility()==View.VISIBLE){
+            titleBar.setAnimation(AnimationUtils.loadAnimation(this,R.anim.top_out));
+            ckSelect.setAnimation(AnimationUtils.loadAnimation(this,R.anim.fade_out));
+            ckSelect.setVisibility(View.GONE);
+            titleBar.setVisibility(View.GONE);
+            statusBarColorTransparent();
         }else {
-            btOk.setText("完成");
-            btOk.setEnabled(false);
+            titleBar.setAnimation(AnimationUtils.loadAnimation(this,R.anim.top_in));
+            ckSelect.setAnimation(AnimationUtils.loadAnimation(this,R.anim.fade_in));
+            titleBar.setVisibility(View.VISIBLE);
+            ckSelect.setVisibility(View.VISIBLE);
+            statusBarColorUser();
         }
     }
 
-    public static void GoPreview(Context context,int position){
+
+    public static void GoPreview(Activity context, int position,int request){
         Intent intent = new Intent(context, ImagePreviewActivity.class);
         intent.putExtra(Code.EXTRA_SELECTED_IMAGE_POSITION, position);
-        context.startActivity(intent);
+        context.startActivityForResult(intent,request);
     }
 
 
