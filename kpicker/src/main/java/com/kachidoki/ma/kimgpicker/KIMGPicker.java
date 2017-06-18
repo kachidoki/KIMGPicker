@@ -55,7 +55,10 @@ public class KIMGPicker {
         dataHolder.clearSelectedImages();
     }
 
-    //goPick
+    // goPick
+    public static void GoPick(Activity context,ImageLoader loader,int request){
+        GoPick(context,new KPConfig.Builder(context).build(),loader,request);
+    }
 
     public static void GoPick(Activity context,KPConfig config,ImageLoader loader,int request){
         GoPick(context,config,loader,request,false);
@@ -71,7 +74,7 @@ public class KIMGPicker {
 
     public static void GoCrop(Activity context, String imagePath) {
         File outFile = Utils.createFile(new File(KIMGPicker.getInstance().dataHolder.config.cropCacheFolder),"crop_",".jpg");
-        //cache the file to return
+        // cache the file to return
         getInstance().dataHolder.setCacheTakeFile(outFile);
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(Utils.getImageContentUri(context,new File(imagePath)), "image/*");
