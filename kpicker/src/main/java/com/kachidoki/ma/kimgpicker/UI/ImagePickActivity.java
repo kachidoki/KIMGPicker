@@ -147,7 +147,8 @@ public class ImagePickActivity extends ImageConfigActivity implements View.OnCli
                     pickAdapter.setImgData(folder.getImgs());
                     btDir.setText(folder.getName());
                 }
-//-------------------------------------recycler滑动到顶部------------------------------------------
+                //scroll to top
+                recyclerView.scrollToPosition(0);
             }
         });
         popFolderWindow.setMargin(mFooterBar.getHeight());
