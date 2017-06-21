@@ -20,7 +20,7 @@ import java.io.File;
 
 public class KIMGPicker {
 
-    public static final String RESULT = "KP_RESULE";
+    public static final String RESULT = "KP_RESULT";
 
     private KPData dataHolder;
     private ImageLoader imageLoader;
