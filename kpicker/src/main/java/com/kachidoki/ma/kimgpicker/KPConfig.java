@@ -77,6 +77,11 @@ public class KPConfig {
     public int outputX;
     public int outputY;
 
+    /**
+     * is use compressor
+     */
+    public boolean needCompressor;
+
     public KPConfig(Builder builder) {
         this.needCrop = builder.needCrop;
         this.multiSelect = builder.multiSelect;
@@ -97,6 +102,7 @@ public class KPConfig {
         this.aspectY = builder.aspectY;
         this.outputX = builder.outputX;
         this.outputY = builder.outputY;
+        this.needCompressor = builder.needCompressor;
     }
 
     public static class Builder implements Serializable {
@@ -106,6 +112,7 @@ public class KPConfig {
         private boolean rememberSelected = false;
         private int maxNum = 9;
         private boolean needCamera = true;
+        private boolean needCompressor = false;
 
 
         private int statusBarColor = -1;
@@ -156,6 +163,11 @@ public class KPConfig {
             allImagesText = context.getString(R.string.all_img);
 
 
+        }
+
+        public Builder needCompressor(boolean needCompressor) {
+            this.needCompressor = needCompressor;
+            return this;
         }
 
         public Builder needCrop(boolean needCrop) {

@@ -21,7 +21,9 @@ public class KPCompressor {
     private String destinationDirectoryPath;
 
     public KPCompressor(Context context) {
-        destinationDirectoryPath = context.getCacheDir().getPath() + File.pathSeparator + "Compressor";
+        destinationDirectoryPath = context.getCacheDir().getAbsolutePath() + File.separator + "Compressor";
+        File folder = new File(destinationDirectoryPath);
+        if (!folder.exists() || !folder.isDirectory()) folder.mkdirs();
     }
 
     public KPCompressor MaxSize(int maxWidth,int maxHeight) {
@@ -51,7 +53,7 @@ public class KPCompressor {
 
     public File compressToFile(File imageFile, String compressedFileName) throws IOException {
         return CompressorUtil.compressImage(imageFile, maxWidth, maxHeight, compressFormat, quality,
-                destinationDirectoryPath + File.pathSeparator + compressedFileName);
+                destinationDirectoryPath + File.separator + compressedFileName);
     }
 
     public Bitmap compressToBitmap(File imageFile) {

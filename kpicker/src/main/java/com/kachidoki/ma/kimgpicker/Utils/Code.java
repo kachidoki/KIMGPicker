@@ -16,4 +16,7 @@ public class Code {
 
     public static final String EXTRA_SELECTED_IMAGE_POSITION = "selected_image_position";
     public static final String EXTRA_USE_LASTSELECTED = "use_last_select";
+
+    public static final String EXTRA_IMAGE_PATH = "image_path";
+    public static final String EXTRA_WHICH_REQUEST = "TakeOrCrop";
 }

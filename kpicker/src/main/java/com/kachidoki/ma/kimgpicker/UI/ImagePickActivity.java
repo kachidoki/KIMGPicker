@@ -16,12 +16,12 @@ import com.kachidoki.ma.kimgpicker.Adapter.ImagePickAdapter;
 import com.kachidoki.ma.kimgpicker.Adapter.PopFolderAdapter;
 import com.kachidoki.ma.kimgpicker.Bean.ImgFolder;
 import com.kachidoki.ma.kimgpicker.Bean.ImgItem;
-import com.kachidoki.ma.kimgpicker.KIMGPicker;
 import com.kachidoki.ma.kimgpicker.Loader.ImgDataLoder;
 import com.kachidoki.ma.kimgpicker.Loader.LoaderCallBack;
 import com.kachidoki.ma.kimgpicker.R;
 import com.kachidoki.ma.kimgpicker.Utils.ActivityUtils;
 import com.kachidoki.ma.kimgpicker.Utils.Code;
+import com.kachidoki.ma.kimgpicker.Utils.Utils;
 import com.kachidoki.ma.kimgpicker.Widget.DividerGridItemDecoration;
 import com.kachidoki.ma.kimgpicker.Widget.PopFolderWindow;
 
@@ -32,7 +32,7 @@ import java.util.List;
  * Created by Kachidoki on 2017/6/13.
  */
 
-public class ImagePickActivity extends ImageConfigActivity implements View.OnClickListener,LoaderCallBack, ImagePickAdapter.OnPickItemListener {
+public class ImagePickActivity extends ImageUiActivity implements View.OnClickListener,LoaderCallBack, ImagePickAdapter.OnPickItemListener {
 
     private boolean first=false;
 
@@ -118,7 +118,7 @@ public class ImagePickActivity extends ImageConfigActivity implements View.OnCli
             }
         } else if (requestCode == Code.REQUEST_PERMISSION_CAMERA) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                KIMGPicker.GoTake(this,picker.getDataHolder().config.takeImageFile);
+                Utils.GoTake(this,picker,Code.REQUEST_CODE_TAKE);
             } else {
                 ActivityUtils.showToast(getString(R.string.take_permissions_limit),this);
             }
@@ -189,7 +189,7 @@ public class ImagePickActivity extends ImageConfigActivity implements View.OnCli
         } else {
             if (picker.getDataHolder().config.needCrop) {
                 // go crop
-                KIMGPicker.GoCrop(this,imageItem.getPath());
+                Utils.GoCrop(this,picker,imageItem.getPath(),Code.REQUEST_CODE_CROP);
             } else {
                 // single and not crop, add imageItem finish
                 setBackResult(picker.getDataHolder().getSelectedSingleResult(imageItem));
@@ -217,7 +217,7 @@ public class ImagePickActivity extends ImageConfigActivity implements View.OnCli
         if (!ActivityUtils.checkPermission(Manifest.permission.CAMERA,this)) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, Code.REQUEST_PERMISSION_CAMERA);
         } else {
-            KIMGPicker.GoTake(this,picker.getDataHolder().config.takeImageFile);
+            Utils.GoTake(this,picker,Code.REQUEST_CODE_TAKE);
         }
     }
 
@@ -250,18 +250,5 @@ public class ImagePickActivity extends ImageConfigActivity implements View.OnCli
             exit();
         }
     }
-
-    private void exit(){
-        KIMGPicker.getInstance().clearCache();
-        finish();
-    }
-
-    private void setBackResult(ArrayList<String> result){
-        Intent backIntent = new Intent();
-        backIntent.putStringArrayListExtra(KIMGPicker.RESULT,result);
-        setResult(RESULT_OK,backIntent);
-    }
-
-
 
 }

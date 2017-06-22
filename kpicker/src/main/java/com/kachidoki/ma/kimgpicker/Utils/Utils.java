@@ -7,12 +7,15 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.util.DisplayMetrics;
+
+import com.kachidoki.ma.kimgpicker.KIMGPicker;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -136,7 +139,7 @@ public class Utils {
 
 
     /**
-     * take pictures
+     * create intent for go to take pictures
      * @param context
      * @param requestCode
      * @param takeImageFile
@@ -163,6 +166,45 @@ public class Utils {
             }
         }
         context.startActivityForResult(takePictureIntent, requestCode);
+    }
+
+    /**
+     * the enter used in packages to goTake not for user
+     * @param context
+     * @param picker
+     * @param request
+     */
+    public static void GoTake(Activity context, KIMGPicker picker, int request){
+        File takeImageFile = new File(picker.getDataHolder().config.takeImageFile);
+        takeImageFile = Utils.createFile(takeImageFile, "IMG_", ".jpg");
+        picker.getDataHolder().setCacheTakeFile(takeImageFile);
+        Utils.takePicture(context,request,takeImageFile);
+    }
+
+    /**
+     * the enter used in packages to goCrop not for user
+     * @param context
+     * @param picker
+     * @param imagePath
+     * @param request
+     */
+    public static void GoCrop(Activity context,KIMGPicker picker,String imagePath,int request) {
+        File outFile = Utils.createFile(new File(picker.getDataHolder().config.cropCacheFolder),"crop_",".jpg");
+        // cache the file to return
+        picker.getDataHolder().setCacheTakeFile(outFile);
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(Utils.getImageContentUri(context,new File(imagePath)), "image/*");
+        intent.putExtra("crop", "true");
+        intent.putExtra("aspectX", picker.getDataHolder().config.aspectX);
+        intent.putExtra("aspectY", picker.getDataHolder().config.aspectY);
+        intent.putExtra("outputX", picker.getDataHolder().config.outputX);
+        intent.putExtra("outputY", picker.getDataHolder().config.outputY);
+        intent.putExtra("scale", true);
+        intent.putExtra("return-data", false);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(outFile));
+        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+        intent.putExtra("noFaceDetection", true);
+        context.startActivityForResult(intent,request);
     }
 
 }

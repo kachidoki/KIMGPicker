@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.kachidoki.ma.kimgpicker.KIMGPicker;
+import com.kachidoki.ma.kimgpicker.KPCompressor;
 import com.kachidoki.ma.kimgpicker.KPConfig;
 import com.kachidoki.ma.kimgpicker.Loader.ImageLoader;
 
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
                                     .needCamera(true)
                                     .multiSelect(false)
                                     .needCrop(false)
+                                    .needCompressor(true)
                                     .build();
 
         final KPConfig multi = new KPConfig.Builder(this)
@@ -40,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
                 .multiSelect(true)
                 .needCrop(false)
                 .build();
+
+        final KPCompressor compressor = new KPCompressor(this);
+
 
 
         findViewById(R.id.multiSelect).setOnClickListener(new View.OnClickListener() {
@@ -52,7 +57,8 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.single).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                KIMGPicker.GoPick(MainActivity.this, single,new GlideImageLoader(),request);
+//                KIMGPicker.GoPick(MainActivity.this, single,new GlideImageLoader(),request);
+                KIMGPicker.GoPick(MainActivity.this,single,new GlideImageLoader(),compressor,request,false);
             }
         });
     }

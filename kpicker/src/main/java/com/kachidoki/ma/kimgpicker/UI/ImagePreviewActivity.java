@@ -21,7 +21,7 @@ import java.util.List;
  * Created by Kachidoki on 2017/6/13.
  */
 
-public class ImagePreviewActivity extends ImageConfigActivity implements View.OnClickListener, ImagePreviewAdapter.PhotoClickListener {
+public class ImagePreviewActivity extends ImageUiActivity implements View.OnClickListener, ImagePreviewAdapter.PhotoClickListener {
 
 
     private ColorCheckBox ckSelect;
