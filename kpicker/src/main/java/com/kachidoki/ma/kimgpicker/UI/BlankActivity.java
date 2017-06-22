@@ -22,13 +22,11 @@ import com.kachidoki.ma.kimgpicker.Utils.Utils;
 
 public class BlankActivity extends ImageConfigActivity{
 
-    KIMGPicker picker;
-    String imagePath;
+    private String imagePath;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        picker = KIMGPicker.getInstance();
         Intent intent = getIntent();
         if (intent.getIntExtra(Code.EXTRA_WHICH_REQUEST,0)==Code.REQUEST_CODE_TAKE){
             requestTake();

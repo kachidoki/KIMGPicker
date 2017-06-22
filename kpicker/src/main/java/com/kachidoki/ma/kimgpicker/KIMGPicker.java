@@ -3,6 +3,7 @@ package com.kachidoki.ma.kimgpicker;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
 
 import com.kachidoki.ma.kimgpicker.Loader.ImageLoader;
 import com.kachidoki.ma.kimgpicker.UI.BlankActivity;
@@ -44,21 +45,27 @@ public class KIMGPicker {
     }
 
     public void clearData(){
+        if (dataHolder==null) return;
         dataHolder.clearCache();
         dataHolder.clearSelectedImages();
     }
 
     public void clearCache(){
+        if (dataHolder==null) return;
         dataHolder.clearCache();
     }
 
     public void clearSelected(){
+        if (dataHolder==null) return;
         dataHolder.clearSelectedImages();
     }
 
     // goPick
     public static void GoPick(Activity context,ImageLoader loader,int request){
-        GoPick(context,new KPConfig.Builder(context).build(),loader,request);
+        if (getInstance().dataHolder==null){
+            getInstance().dataHolder.config = new KPConfig.Builder(context).build();
+        }
+        GoPick(context,getInstance().dataHolder.config,loader,request);
     }
 
     public static void GoPick(Activity context,KPConfig config,ImageLoader loader,int request){
@@ -79,6 +86,9 @@ public class KIMGPicker {
     }
 
     public static void GoCrop(Activity context,String imagePath,int request){
+        if (getInstance().dataHolder==null){
+            getInstance().getDataHolder().config = new KPConfig.Builder(context).build();
+        }
         GoCrop(context,getInstance().dataHolder.config,null,imagePath,request);
     }
 
@@ -92,6 +102,9 @@ public class KIMGPicker {
     }
 
     public static void GoTake(Activity context,int request){
+        if (getInstance().dataHolder==null){
+            getInstance().getDataHolder().config = new KPConfig.Builder(context).build();
+        }
         GoTake(context,getInstance().dataHolder.config,null,request);
     }
 

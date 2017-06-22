@@ -2,9 +2,11 @@ package com.kachidoki.ma.kimgpickerSample;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,12 +25,14 @@ public class MainActivity extends AppCompatActivity {
 
     TextView result;
     final int request = 1111;
+    ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         result = (TextView) findViewById(R.id.result);
+        imageView = (ImageView) findViewById(R.id.compressor);
 
         final KPConfig single = new KPConfig.Builder(this)
                                     .needCamera(true)
@@ -61,6 +65,20 @@ public class MainActivity extends AppCompatActivity {
                 KIMGPicker.GoPick(MainActivity.this,single,new GlideImageLoader(),compressor,request,false);
             }
         });
+
+        findViewById(R.id.goTake).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                KIMGPicker.GoTake(MainActivity.this,request);
+            }
+        });
+
+        findViewById(R.id.goCrop).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                KIMGPicker.GoCrop(MainActivity.this,"some image",request);
+            }
+        });
     }
 
     @Override
@@ -69,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode==request&&resultCode==RESULT_OK){
             ArrayList<String> res = data.getStringArrayListExtra(KIMGPicker.RESULT);
             result.setText(res.toString());
+            imageView.setImageBitmap(BitmapFactory.decodeFile(res.get(0)));
         }
     }
 
