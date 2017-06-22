@@ -144,11 +144,11 @@ public class KPConfig {
             if (Utils.existSDCard()){
                 takeImageFile = Environment.getExternalStorageDirectory().getAbsolutePath()+ "/DCIM/camera/";
                 // /sdcard/Android/data/<application package>/cache
-                cropCacheFolder = context.getExternalCacheDir().getPath();
+                cropCacheFolder = context.getExternalCacheDir().getAbsolutePath();
             } else{
                 takeImageFile = Environment.getDataDirectory().getAbsolutePath();
                 // /data/data/<application package>/cache
-                cropCacheFolder = context.getCacheDir().getPath();
+                cropCacheFolder = context.getCacheDir().getAbsolutePath();
             }
 
             title = context.getString(R.string.pick_img);

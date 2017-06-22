@@ -51,8 +51,7 @@ public class ImagePickActivity extends ImageUiActivity implements View.OnClickLi
     @Override
     public void createInit(){
         setContentView(R.layout.activity_img_pick);
-        Intent intent = getIntent();
-        if (!intent.getBooleanExtra(Code.EXTRA_USE_LASTSELECTED,false)){
+        if (!config.rememberSelected||picker.getDataHolder().getSelectedImages()==null){
             picker.getDataHolder().newSelect();
         }
     }

@@ -9,6 +9,13 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/allConfig"
+        android:text="allConfig"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/multiSelect"
         android:text="multi"
         />
@@ -17,6 +24,12 @@
         android:layout_height="wrap_content"
         android:id="@+id/single"
         android:text="single"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/compressor"
+        android:text="compressor"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -37,7 +50,7 @@
         android:layout_height="wrap_content"
         android:text="返回结果"/>
     <ImageView
-        android:id="@+id/compressor"
+        android:id="@+id/Img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

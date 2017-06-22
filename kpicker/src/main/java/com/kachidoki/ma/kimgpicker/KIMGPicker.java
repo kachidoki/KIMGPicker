@@ -69,21 +69,18 @@ public class KIMGPicker {
     }
 
     public static void GoPick(Activity context,KPConfig config,ImageLoader loader,int request){
-        GoPick(context,config,loader,request,false);
+        GoPick(context,config,loader,null,request);
     }
 
-    public static void GoPick(Activity context,KPConfig config,ImageLoader loader,int request,boolean isuselast){
-        GoPick(context,config,loader,null,request,isuselast);
-    }
-
-    public static void GoPick(Activity context,KPConfig config,ImageLoader loader,KPCompressor compressor,int request,boolean isuselast){
+    public static void GoPick(Activity context,KPConfig config,ImageLoader loader,KPCompressor compressor,int request){
         getInstance().getDataHolder().config = config;
         getInstance().imageLoader = loader;
         getInstance().compressor = compressor;
         Intent intent = new Intent(context, ImagePickActivity.class);
-        intent.putExtra(Code.EXTRA_USE_LASTSELECTED,isuselast);
         context.startActivityForResult(intent,request);
     }
+
+
 
     public static void GoCrop(Activity context,String imagePath,int request){
         if (getInstance().dataHolder==null){
