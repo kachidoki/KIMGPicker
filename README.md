@@ -1,8 +1,16 @@
+# KPicker
+
+![](https://img.shields.io/github/release/kachidoki/KIMGPicker.svg)
+
+<p align="center"><img src="https://github.com/kachidoki/KIMGPicker/blob/master/ss.png" width="50%" /></p>
+
+
+
 ## Gradle依赖
 
 ```groovy
 dependencies {
-    compile 'com.kachidoki.library:kpicker:1.0.0'
+    compile 'com.kachidoki.library:kpicker:1.1.0'
 }
 ```
 
@@ -15,23 +23,23 @@ dependencies {
 ```java
 KPConfig allConfig 
   = new KPConfig.Builder(this)
-                .needCompressor(false)			//选择后是否需要压缩,需要配合KPCompressor使用
-                .needCamera(true)				//是否需要显示拍照
-                .needCrop(false)				//选择完是否需要裁剪,只能用于单选
-                .cropSize(1,1,300,300)			//裁剪长宽比例与输出宽高
-                .multiSelect(true)				//是否需要多选
-                .rememberSelected(true)			//是否使用上次选择的结果
-                .maxNum(6)						//多选数量上限
-                .statusBarColor(getColor(R.color.colorAccent))			//状态栏色调
-                .titleBgColor(getColor(R.color.colorAccent))			//toolbar色调
-                .navigationColor(getColor(R.color.colorAccent))			//导航栏色调
-                .allImageViewColor(getColor(R.color.colorAccent))		//选择文件夹色调
-                .title("标题")										   //选择页面标题
-                .titleColor(getColor(R.color.colorPrimary))				//标题字体
-                .btnTextColor(getColor(R.color.colorPrimary))			//确定按钮字体颜色
-                .allImagesText("全部")								   //全部图片的名称
-                .cropCacheFolder("")				//裁剪图片存放文件夹,若不设置使用默认值
-                .takeImageFile("")					//拍照图片存放文件夹,若不设置使用默认值
+                .needCompressor(false)//选择后是否需要压缩,需要配合KPCompressor使用
+                .needCamera(true)//是否需要显示拍照
+                .needCrop(false)//选择完是否需要裁剪,只能用于单选
+                .cropSize(1,1,300,300)//裁剪长宽比例与输出宽高
+                .multiSelect(true)//是否需要多选
+                .rememberSelected(true)//是否使用上次选择的结果
+                .maxNum(6)//多选数量上限
+                .statusBarColor(getColor(R.color.colorAccent))//状态栏色调
+                .titleBgColor(getColor(R.color.colorAccent))//toolbar色调
+                .navigationColor(getColor(R.color.colorAccent))	//导航栏色调
+                .allImageViewColor(getColor(R.color.colorAccent))//选择文件夹色调
+                .title("标题")//选择页面标题
+                .titleColor(getColor(R.color.colorPrimary))	//标题字体
+                .btnTextColor(getColor(R.color.colorPrimary))//确定按钮字体颜色
+                .allImagesText("全部")//全部图片的名称
+                .cropCacheFolder("")//裁剪图片存放文件夹,若不设置使用默认值
+                .takeImageFile("")//拍照图片存放文件夹,若不设置使用默认值
                 .build();
 ```
 
@@ -46,8 +54,8 @@ class GlideImageLoader implements ImageLoader {
         public void displayImage(Context context, String path, ImageView imageView, int width, int height) {
             Glide.with(context)                               
                     .load(Uri.fromFile(new File(path)))      
-                    .error(R.mipmap.default_image)           //设置错误图片
-                    .placeholder(R.color.gray)               //设置占位图片
+                    .error(R.mipmap.default_image)//设置错误图片
+                    .placeholder(R.color.gray)//设置占位图片
                     .diskCacheStrategy(DiskCacheStrategy.ALL)//缓存全尺寸
                     .into(imageView);
         }
@@ -108,3 +116,8 @@ KIMGPicker.GoPick(this,compressorConfig,new GlideImageLoader(),compressor,reques
 **KPCompressor**类也可单独使用进行压缩
 
 **更多参看源码**
+
+## License
+
+请查看[LICENSE](https://github.com/kachidoki/KIMGPicker/blob/v1.1.0/LICENSE)
+
