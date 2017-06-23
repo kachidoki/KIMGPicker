@@ -78,10 +78,10 @@ KIMGPicker.GoPick(this, allConfig,new GlideImageLoader(),request);
 
 ```java
 KPCompressor compressor = new KPCompressor(this)
-                              .MaxSize(400,400)							 //最大长宽
-                              .Quality(90)								 //输出质量
+                              .MaxSize(400,400)//最大长宽
+                              .Quality(90)//输出质量
                               .CompressFormat(Bitmap.CompressFormat.JPEG)//输出格式
-                              .DestinationPath("")						 //输出的文件夹
+                              .DestinationPath("")//输出的文件夹
  
   KPConfig compressorConfig = new KPConfig.Builder(this)
                                           .multiSelect(false)
