@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 
 import com.kachidoki.ma.kimgpicker.KIMGPicker;
 import com.kachidoki.ma.kimgpicker.R;
@@ -87,10 +88,9 @@ public class BlankActivity extends ImageConfigActivity{
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Code.REQUEST_CODE_TAKE&&resultCode == RESULT_OK){
             setBackResult(picker.getDataHolder().getCacheResult());
-            exit();
         }else if (requestCode == Code.REQUEST_CODE_CROP&&resultCode == RESULT_OK){
             setBackResult(picker.getDataHolder().getCacheResult());
-            exit();
         }
+        exit();
     }
 }
